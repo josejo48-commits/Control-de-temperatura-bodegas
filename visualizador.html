@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resultados — Bodegas Margarinas</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyOm-PHUKhm_1PBiewGzNVnYERgz_bVbOnA",
+  authDomain: "temperatura-bodegas.firebaseapp.com",
+  databaseURL: "https://temperatura-bodegas-default-rtdb.firebaseio.com",
+  projectId: "temperatura-bodegas",
+  storageBucket: "temperatura-bodegas.firebasestorage.app",
+  messagingSenderId: "365970465101",
+  appId: "1:365970465101:web:f5d1b75d1a470e881a1704"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+window._fb = { db, ref, onValue };
+window.dispatchEvent(new Event('fb-ready'));
+</script>
+<style>
+:root{
+  --azul:#0f2d4a;--azul-c:#1a5276;--azul-l:#e8f0f7;
+  --verde:#0a4a3a;--verde-c:#0d7a5f;--acento:#1abc9c;--acento-l:#eafaf6;
+  --rojo:#922b21;--rojo-l:#fdedec;
+  --gris:#f4f6f7;--borde:#d5d8dc;--texto:#17202a;--muted:#5d6d7e;--radio:8px;
+  --c-line:#3266ad;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#eaecee;color:var(--texto);min-height:100vh;}
+.top-bar{background:var(--azul);color:white;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,.2);position:sticky;top:0;z-index:100;}
+.top-bar h1{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.top-bar p{font-size:11px;opacity:.55;margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
+.sync-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.6);}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#aaa;flex-shrink:0;}
+.sync-dot.on{background:var(--acento);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.page{max-width:1000px;margin:0 auto;padding:28px 16px 60px;}
+.vis-card{background:white;border:1px solid var(--borde);border-radius:14px;padding:22px 24px 20px;margin-bottom:28px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.vis-title{font-size:16px;font-weight:700;}
+.vis-sub{font-size:12px;color:var(--muted);margin:3px 0 18px;}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.metric{background:var(--gris);border-radius:var(--radio);padding:11px 14px;text-align:center;}
+.metric-label{font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;}
+.metric-value{font-size:22px;font-weight:700;line-height:1;}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-bottom:14px;}
+.controls label{font-size:12px;color:var(--muted);}
+.controls select{font-size:12px;padding:5px 10px;border:1px solid var(--borde);border-radius:var(--radio);background:white;color:var(--texto);cursor:pointer;}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-left:auto;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);}
+.l-solid{display:inline-block;width:20px;height:3px;border-radius:2px;background:var(--c-line);}
+.l-dmax{display:inline-block;width:20px;height:0;border-top:2px dashed #E24B4A;}
+.l-dmin{display:inline-block;width:20px;height:0;border-top:2px dashed #185FA5;}
+.chart-wrap{position:relative;width:100%;height:320px;}
+.range-label{font-size:11px;color:var(--muted);text-align:center;margin-top:8px;}
+.tbl-toggle{font-size:12px;color:var(--azul-c);cursor:pointer;border:none;background:none;font-weight:600;padding:8px 0 2px;display:flex;align-items:center;gap:5px;}
+.tbl-toggle:hover{text-decoration:underline;}
+.tbl-wrap{overflow-x:auto;margin-top:4px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{padding:7px 10px;text-align:left;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--borde);white-space:nowrap;}
+tbody td{padding:7px 10px;border-bottom:1px solid #f0f0ee;}
+tbody tr:hover{background:var(--gris);}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;}
+.badge-t{background:#fdecea;color:#7b241c;border:1px solid #f1948a;}
+.badge-h{background:var(--acento-l);color:var(--verde);border:1px solid #76d7c4;}
+.empty-vis{background:white;border:2px dashed var(--borde);border-radius:14px;padding:40px;text-align:center;margin-bottom:28px;}
+.empty-vis strong{display:block;font-size:15px;margin-bottom:8px;}
+.empty-vis p{color:var(--muted);font-size:13px;}
+@media(max-width:580px){
+  .metrics{grid-template-columns:repeat(2,1fr);}
+  .controls{flex-direction:column;align-items:flex-start;}
+  .legend{margin-left:0;}
+}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div>
+    <h1>📊 Resultados</h1>
+    <p>Consolidado de temperaturas — Bodegas Margarinas</p>
+  </div>
+  <div class="sync-badge">
+    <div class="sync-dot" id="sync-dot"></div>
+    <span id="sync-txt">conectando...</span>
+  </div>
+</div>
+
+<div class="page">
+  <div id="vis-b1"></div>
+  <div id="vis-b2"></div>
+</div>
+
+<script>
+const T_MAX=18,T_MIN=16,Y_MIN=15,Y_MAX=26;
+const charts={},filtrados={b1:[],b2:{}};
+let dbData={b1:{},b2:{}};
+
+window.addEventListener('fb-ready',()=>{
+  const {db,ref,onValue}=window._fb;
+  document.getElementById('sync-dot').classList.add('on');
+  document.getElementById('sync-txt').textContent='en línea';
+  ['b1','b2'].forEach(id=>{
+    onValue(ref(db,'lecturas/'+id),snap=>{
+      dbData[id]=snap.val()||{};
+      renderVis(id);
+    });
+  });
+});
+
+function fmtF(f){if(!f)return'';const p=f.split('-');return p.length===3?p[2]+'/'+p[1]:f;}
+
+function renderVis(id){
+  const datos=Object.values(dbData[id]||{}).sort((a,b)=>a.ts-b.ts);
+  const num=id==='b1'?'1':'2';
+  const el=document.getElementById('vis-'+id);
+
+  if(!datos.length){
+    el.innerHTML=`<div class="empty-vis">
+      <strong>Bodega #${num} — sin datos aún</strong>
+      <p>Los datos aparecerán aquí en tiempo real cuando se ingresen lecturas.</p>
+    </div>`;
+    return;
+  }
+
+  const fechasSet=[...new Set(datos.map(r=>r.fecha))].sort();
+  const prevFrom=document.getElementById('vfrom-'+id)?.value;
+  const prevTo=document.getElementById('vto-'+id)?.value;
+
+  el.innerHTML=`
+  <div class="vis-card">
+    <p class="vis-title">Bodega #${num}</p>
+    <p class="vis-sub" id="vsub-${id}">—</p>
+    <div class="metrics">
+      <div class="metric"><div class="metric-label">Mínima</div><div class="metric-value" id="vmin-${id}" style="color:#185FA5">—</div></div>
+      <div class="metric"><div class="metric-label">Máxima</div><div class="metric-value" id="vmax-${id}" style="color:#A32D2D">—</div></div>
+      <div class="metric"><div class="metric-label">Promedio</div><div class="metric-value" id="vavg-${id}">—</div></div>
+      <div class="metric"><div class="metric-label">Total datos</div><div class="metric-value" id="vcnt-${id}">—</div></div>
+    </div>
+    <div class="controls">
+      <label>Desde:</label><select id="vfrom-${id}"></select>
+      <label>Hasta:</label><select id="vto-${id}"></select>
+      <div class="legend">
+        <div class="legend-item"><span class="l-solid"></span>Temperatura</div>
+        <div class="legend-item"><span class="l-dmax"></span>Máx. 18°C</div>
+        <div class="legend-item"><span class="l-dmin"></span>Mín. 16°C</div>
+      </div>
+    </div>
+    <div class="chart-wrap"><canvas id="vchart-${id}"></canvas></div>
+    <p class="range-label" id="vrl-${id}"></p>
+    <button class="tbl-toggle" onclick="toggleTabla('${id}')">▼ Ver tabla de registros</button>
+    <div id="vtabla-${id}" style="display:none;" class="tbl-wrap"></div>
+  </div>`;
+
+  const fs=document.getElementById('vfrom-'+id);
+  const ts=document.getElementById('vto-'+id);
+  fechasSet.forEach(f=>{
+    const lbl=fmtF(f);
+    fs.innerHTML+=`<option value="${f}">${lbl}</option>`;
+    ts.innerHTML+=`<option value="${f}">${lbl}</option>`;
+  });
+  if(prevFrom && fechasSet.includes(prevFrom)) fs.value=prevFrom;
+  if(prevTo   && fechasSet.includes(prevTo))   ts.value=prevTo;
+  else ts.selectedIndex=fechasSet.length-1;
+
+  if(charts[id]) charts[id].destroy();
+  const ctx=document.getElementById('vchart-'+id).getContext('2d');
+  charts[id]=new Chart(ctx,{
+    type:'line',
+    data:{labels:[],datasets:[
+      {label:'Temperatura',data:[],borderColor:'#3266ad',backgroundColor:'rgba(50,102,173,0.07)',borderWidth:1.5,pointRadius:1.5,pointHoverRadius:5,fill:true,tension:0.3},
+      {label:`Máx ${T_MAX}°C`,data:[],borderColor:'#E24B4A',borderWidth:1.5,borderDash:[6,4],pointRadius:0,fill:false},
+      {label:`Mín ${T_MIN}°C`,data:[],borderColor:'#185FA5',borderWidth:1.5,borderDash:[6,4],pointRadius:0,fill:false}
+    ]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          title:items=>{const r=filtrados[id][items[0].dataIndex];return r?fmtF(r.fecha)+' '+r.hora:'';},
+          label:item=>item.datasetIndex===0?' Temp: '+item.raw.toFixed(1)+'°C':' '+item.dataset.label
+        }}
+      },
+      scales:{
+        x:{ticks:{font:{size:10},color:'#6b6a64',maxRotation:45,autoSkip:true,maxTicksLimit:18},grid:{color:'rgba(0,0,0,.07)'}},
+        y:{min:Y_MIN,max:Y_MAX,ticks:{stepSize:1,callback:v=>v+'°C',font:{size:11},color:'#6b6a64'},grid:{color:'rgba(0,0,0,.07)'}}
+      }
+    }
+  });
+
+  function update(){
+    const fi=fechasSet.indexOf(fs.value),ti=fechasSet.indexOf(ts.value);
+    const [a,b]=fi<=ti?[fi,ti]:[ti,fi];
+    const data=datos.filter(r=>{const i=fechasSet.indexOf(r.fecha);return i>=a&&i<=b;});
+    filtrados[id]=data;
+    const n=data.length;if(!n)return;
+    charts[id].data.labels=data.map(r=>fmtF(r.fecha)+' '+r.hora);
+    charts[id].data.datasets[0].data=data.map(r=>r.temp);
+    charts[id].data.datasets[1].data=new Array(n).fill(T_MAX);
+    charts[id].data.datasets[2].data=new Array(n).fill(T_MIN);
+    charts[id].update();
+    const vals=data.map(r=>r.temp);
+    document.getElementById('vmin-'+id).textContent=Math.min(...vals).toFixed(1)+'°C';
+    document.getElementById('vmax-'+id).textContent=Math.max(...vals).toFixed(1)+'°C';
+    document.getElementById('vavg-'+id).textContent=(vals.reduce((s,v)=>s+v,0)/n).toFixed(1)+'°C';
+    document.getElementById('vcnt-'+id).textContent=n;
+    document.getElementById('vsub-'+id).textContent=fmtF(data[0].fecha)+' → '+fmtF(data[n-1].fecha)+' · '+n+' lecturas';
+    document.getElementById('vrl-'+id).textContent='⏱  '+fmtF(data[0].fecha)+' '+data[0].hora+'  →  '+fmtF(data[n-1].fecha)+' '+data[n-1].hora;
+    renderTabla(id,data);
+  }
+  fs.addEventListener('change',update);
+  ts.addEventListener('change',update);
+  update();
+}
+
+function renderTabla(id,data){
+  const el=document.getElementById('vtabla-'+id);if(!el)return;
+  el.innerHTML=`<table>
+    <thead><tr><th>No.</th><th>Fecha</th><th>Hora</th><th>Temp.</th><th>Humedad</th><th>Inspector</th><th>Observaciones</th></tr></thead>
+    <tbody>${data.map(r=>`<tr>
+      <td>${r.no}</td><td>${fmtF(r.fecha)}</td><td>${r.hora}</td>
+      <td><span class="badge badge-t">${r.temp}°C</span></td>
+      <td><span class="badge badge-h">${r.humi?r.humi+'%':'—'}</span></td>
+      <td style="color:#1a5276;font-weight:600;">${r.inspector||'—'}</td>
+      <td style="color:#6b6a64;font-size:12px;">${r.obs||''}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function toggleTabla(id){
+  const el=document.getElementById('vtabla-'+id);
+  const btn=el.previousElementSibling;
+  const vis=el.style.display==='none';
+  el.style.display=vis?'block':'none';
+  btn.textContent=(vis?'▲ Ocultar':'▼ Ver')+' tabla de registros';
+}
+</script>
+</body>
+</html>

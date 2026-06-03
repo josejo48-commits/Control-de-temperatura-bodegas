@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ingreso — Bodegas Margarinas</title>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyOm-PHUKhm_1PBiewGzNVnYERgz_bVbOnA",
+  authDomain: "temperatura-bodegas.firebaseapp.com",
+  databaseURL: "https://temperatura-bodegas-default-rtdb.firebaseio.com",
+  projectId: "temperatura-bodegas",
+  storageBucket: "temperatura-bodegas.firebasestorage.app",
+  messagingSenderId: "365970465101",
+  appId: "1:365970465101:web:f5d1b75d1a470e881a1704"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+window._fb = { db, ref, push, onValue };
+window.dispatchEvent(new Event('fb-ready'));
+</script>
+<style>
+:root{
+  --azul:#0f2d4a;--azul-c:#1a5276;--azul-l:#e8f0f7;
+  --verde:#0a4a3a;--verde-c:#0d7a5f;--acento:#1abc9c;--acento-l:#eafaf6;
+  --rojo:#922b21;--rojo-l:#fdedec;
+  --gris:#f4f6f7;--borde:#d5d8dc;--texto:#17202a;--muted:#5d6d7e;--radio:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#eaecee;color:var(--texto);min-height:100vh;}
+.top-bar{background:var(--azul);color:white;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,.2);position:sticky;top:0;z-index:100;}
+.top-bar h1{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.top-bar p{font-size:11px;opacity:.55;margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
+.sync-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.6);}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#aaa;flex-shrink:0;}
+.sync-dot.on{background:var(--acento);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.page{max-width:720px;margin:0 auto;padding:24px 16px 60px;}
+.tabs-ing{display:flex;gap:6px;margin-bottom:20px;background:white;border:1px solid var(--borde);border-radius:var(--radio);padding:4px;}
+.tab-ing{flex:1;padding:10px;border:none;border-radius:6px;background:transparent;cursor:pointer;font-size:14px;font-weight:600;color:var(--muted);transition:all .15s;text-align:center;}
+.tab-ing.active{background:var(--azul);color:white;}
+.bod-panel{display:none;}
+.bod-panel.active{display:block;}
+.card{background:white;border:1px solid var(--borde);border-radius:12px;padding:20px 22px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.card-title{font-size:12px;font-weight:700;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px;color:var(--azul);border-bottom:2px solid var(--azul-l);padding-bottom:10px;display:flex;align-items:center;gap:7px;}
+.preview-img{width:100%;max-height:200px;object-fit:contain;border-radius:var(--radio);border:1px solid var(--borde);margin-bottom:12px;display:none;}
+.foto-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;}
+.btn-foto{position:relative;border:2px dashed var(--borde);border-radius:var(--radio);padding:18px 10px;text-align:center;cursor:pointer;background:var(--gris);transition:background .15s,border-color .15s;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.btn-foto:hover{background:white;border-color:#b0afaa;}
+.btn-foto input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.btn-foto .f-ico{font-size:28px;line-height:1;}
+.btn-foto .f-lbl{font-size:13px;font-weight:700;color:var(--texto);}
+.btn-foto .f-sub{font-size:11px;color:var(--muted);}
+.btn-foto.camara{border-color:var(--acento);background:var(--acento-l);}
+.btn-foto.camara:hover{background:#d0f5ec;}
+.btn-foto.camara .f-lbl{color:var(--verde);}
+.foto-hint{font-size:12px;color:var(--muted);text-align:center;margin-bottom:12px;}
+.status-bar{font-size:13px;padding:8px 12px;border-radius:var(--radio);display:none;margin-bottom:12px;align-items:center;gap:7px;}
+.status-bar.ok{background:var(--acento-l);color:var(--verde);display:flex;}
+.status-bar.error{background:var(--rojo-l);color:var(--rojo);display:flex;}
+.status-bar.saving{background:var(--azul-l);color:var(--azul-c);display:flex;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+input,select,textarea{border:1.5px solid var(--borde);border-radius:7px;padding:9px 11px;font-size:14px;color:var(--texto);background:white;transition:border-color .15s;font-family:inherit;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--azul-c);box-shadow:0 0 0 3px rgba(26,82,118,.1);}
+textarea{resize:vertical;min-height:60px;}
+.btn-save{width:100%;padding:13px;border:none;border-radius:var(--radio);font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--azul);color:white;}
+.btn-save:hover{background:var(--azul-c);}
+.btn-save:disabled{opacity:.5;cursor:not-allowed;}
+.recent-title{font-size:11px;font-weight:700;color:var(--azul);margin-bottom:10px;text-transform:uppercase;letter-spacing:.7px;}
+.recent-list{display:flex;flex-direction:column;gap:6px;}
+.recent-row{background:var(--gris);border:1px solid var(--borde);border-left:4px solid var(--azul-c);border-radius:var(--radio);padding:10px 14px;}
+.recent-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:3px;}
+.recent-num{font-size:13px;font-weight:700;color:var(--azul);}
+.recent-vals{display:flex;gap:8px;}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;}
+.badge-t{background:#fdecea;color:#7b241c;border:1px solid #f1948a;}
+.badge-h{background:var(--acento-l);color:var(--verde);border:1px solid #76d7c4;}
+.recent-meta{font-size:12px;color:var(--muted);}
+.recent-inspector{font-size:12px;color:var(--azul-c);font-weight:700;}
+.empty-list{font-size:13px;color:var(--muted);text-align:center;padding:18px;}
+@media(max-width:520px){
+  .form-grid{grid-template-columns:1fr;}
+  .form-group.full{grid-column:1;}
+}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div>
+    <h1>📝 Ingreso de Lecturas</h1>
+    <p>Bodegas Margarinas</p>
+  </div>
+  <div class="sync-badge">
+    <div class="sync-dot" id="sync-dot"></div>
+    <span id="sync-txt">conectando...</span>
+  </div>
+</div>
+
+<div class="page">
+  <div class="tabs-ing">
+    <button class="tab-ing active" onclick="switchBod('b1',this)">🏭 Bodega 1</button>
+    <button class="tab-ing"        onclick="switchBod('b2',this)">🏭 Bodega 2</button>
+  </div>
+
+  <!-- BODEGA 1 -->
+  <div class="bod-panel active" id="bod-b1">
+    <div class="card">
+      <div class="card-title">📷 Foto del medidor — Bodega 1</div>
+      <img id="prev-b1" class="preview-img">
+      <div class="foto-btns">
+        <label class="btn-foto">
+          <div class="f-ico">📁</div><div class="f-lbl">Subir foto</div><div class="f-sub">Desde galería</div>
+          <input type="file" accept="image/*" onchange="handleImg('b1',this)">
+        </label>
+        <label class="btn-foto camara">
+          <div class="f-ico">📷</div><div class="f-lbl">Tomar foto</div><div class="f-sub">Cámara del celular</div>
+          <input type="file" accept="image/*" capture="environment" onchange="handleImg('b1',this)">
+        </label>
+      </div>
+      <p class="foto-hint">Toma la foto, lee el medidor e ingresa los valores abajo</p>
+      <div class="status-bar" id="st-b1"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">✏️ Datos del registro</div>
+      <div class="form-grid">
+        <div class="form-group full"><label>Inspector</label><input type="text" id="inspector-b1" placeholder="Nombre del inspector"></div>
+        <div class="form-group"><label>Fecha</label><input type="date" id="fecha-b1"></div>
+        <div class="form-group"><label>Hora</label><input type="time" id="hora-b1"></div>
+        <div class="form-group"><label>Temperatura (°C)</label><input type="number" step="0.1" placeholder="22.5" id="temp-b1"></div>
+        <div class="form-group"><label>Humedad (%)</label><input type="number" step="0.1" placeholder="65.0" id="humi-b1"></div>
+        <div class="form-group full"><label>Observaciones</label><textarea id="obs-b1" placeholder="Opcional..."></textarea></div>
+      </div>
+      <button class="btn-save" id="savebtn-b1" onclick="saveRec('b1')">☁️ Guardar en la nube — Bodega 1</button>
+    </div>
+    <div class="card">
+      <div class="recent-title">Últimas 8 lecturas — Bodega 1</div>
+      <div class="recent-list" id="list-b1"><div class="empty-list">Esperando datos...</div></div>
+    </div>
+  </div>
+
+  <!-- BODEGA 2 -->
+  <div class="bod-panel" id="bod-b2">
+    <div class="card">
+      <div class="card-title">📷 Foto del medidor — Bodega 2</div>
+      <img id="prev-b2" class="preview-img">
+      <div class="foto-btns">
+        <label class="btn-foto">
+          <div class="f-ico">📁</div><div class="f-lbl">Subir foto</div><div class="f-sub">Desde galería</div>
+          <input type="file" accept="image/*" onchange="handleImg('b2',this)">
+        </label>
+        <label class="btn-foto camara">
+          <div class="f-ico">📷</div><div class="f-lbl">Tomar foto</div><div class="f-sub">Cámara del celular</div>
+          <input type="file" accept="image/*" capture="environment" onchange="handleImg('b2',this)">
+        </label>
+      </div>
+      <p class="foto-hint">Toma la foto, lee el medidor e ingresa los valores abajo</p>
+      <div class="status-bar" id="st-b2"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">✏️ Datos del registro</div>
+      <div class="form-grid">
+        <div class="form-group full"><label>Inspector</label><input type="text" id="inspector-b2" placeholder="Nombre del inspector"></div>
+        <div class="form-group"><label>Fecha</label><input type="date" id="fecha-b2"></div>
+        <div class="form-group"><label>Hora</label><input type="time" id="hora-b2"></div>
+        <div class="form-group"><label>Temperatura (°C)</label><input type="number" step="0.1" placeholder="22.5" id="temp-b2"></div>
+        <div class="form-group"><label>Humedad (%)</label><input type="number" step="0.1" placeholder="65.0" id="humi-b2"></div>
+        <div class="form-group full"><label>Observaciones</label><textarea id="obs-b2" placeholder="Opcional..."></textarea></div>
+      </div>
+      <button class="btn-save" id="savebtn-b2" onclick="saveRec('b2')">☁️ Guardar en la nube — Bodega 2</button>
+    </div>
+    <div class="card">
+      <div class="recent-title">Últimas 8 lecturas — Bodega 2</div>
+      <div class="recent-list" id="list-b2"><div class="empty-list">Esperando datos...</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let fbReady=false, dbData={b1:{},b2:{}};
+window.addEventListener('fb-ready',()=>{
+  fbReady=true;
+  const {db,ref,onValue}=window._fb;
+  document.getElementById('sync-dot').classList.add('on');
+  document.getElementById('sync-txt').textContent='en línea';
+  ['b1','b2'].forEach(id=>{
+    onValue(ref(db,'lecturas/'+id),snap=>{
+      dbData[id]=snap.val()||{};
+      renderList(id);
+    });
+  });
+});
+function switchBod(id,btn){
+  document.querySelectorAll('.tab-ing').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.bod-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('bod-'+id).classList.add('active');
+}
+function nowDT(){const d=new Date();return{fecha:d.toISOString().slice(0,10),hora:d.toTimeString().slice(0,5)};}
+function handleImg(id,input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const prev=document.getElementById('prev-'+id);
+    prev.src=e.target.result;prev.style.display='block';
+    const t=nowDT();
+    document.getElementById('fecha-'+id).value=t.fecha;
+    document.getElementById('hora-'+id).value=t.hora;
+    setStatus(id,'ok','Foto cargada — ingresa los valores y guarda.');
+  };
+  reader.readAsDataURL(file);
+}
+function setStatus(id,type,msg){
+  const el=document.getElementById('st-'+id);
+  el.className='status-bar';
+  if(!type){el.style.display='none';return;}
+  el.classList.add(type);
+  el.innerHTML=(type==='ok'?'✅':type==='saving'?'⏳':'⚠️')+' '+msg;
+}
+async function saveRec(id){
+  if(!fbReady){alert('Sin conexión. Espera un momento.');return;}
+  const temp=document.getElementById('temp-'+id).value;
+  const humi=document.getElementById('humi-'+id).value;
+  const fecha=document.getElementById('fecha-'+id).value;
+  const hora=document.getElementById('hora-'+id).value;
+  const inspector=document.getElementById('inspector-'+id).value.trim();
+  if(!temp||!humi||!fecha||!hora){alert('Completa Fecha, Hora, Temperatura y Humedad.');return;}
+  if(!inspector){alert('Ingresa el nombre del inspector.');return;}
+  const btn=document.getElementById('savebtn-'+id);
+  btn.disabled=true;
+  setStatus(id,'saving','Guardando en la nube...');
+  const {db,ref,push}=window._fb;
+  const no=Object.keys(dbData[id]||{}).length+1;
+  try{
+    await push(ref(db,'lecturas/'+id),{
+      no,fecha,hora,inspector,
+      temp:+parseFloat(temp).toFixed(1),
+      humi:+parseFloat(humi).toFixed(1),
+      obs:document.getElementById('obs-'+id).value.trim(),
+      ts:Date.now()
+    });
+    setStatus(id,'ok','✅ Guardado correctamente.');
+    ['temp-','humi-','obs-'].forEach(f=>document.getElementById(f+id).value='');
+    document.getElementById('prev-'+id).style.display='none';
+  }catch(e){setStatus(id,'error','Error: '+e.message);}
+  btn.disabled=false;
+}
+function renderList(id){
+  const el=document.getElementById('list-'+id);
+  const arr=Object.values(dbData[id]||{}).sort((a,b)=>a.ts-b.ts);
+  if(!arr.length){el.innerHTML='<div class="empty-list">Sin lecturas aún</div>';return;}
+  el.innerHTML=arr.slice(-8).reverse().map(r=>`
+    <div class="recent-row">
+      <div class="recent-top">
+        <span class="recent-num">#${r.no} &nbsp;${r.fecha} &nbsp;${r.hora}</span>
+        <div class="recent-vals">
+          <span class="badge badge-t">${r.temp}°C</span>
+          <span class="badge badge-h">${r.humi}%</span>
+        </div>
+      </div>
+      <div class="recent-meta">
+        <span class="recent-inspector">👤 ${r.inspector}</span>
+        ${r.obs?' · '+r.obs.slice(0,50):''}
+      </div>
+    </div>`).join('');
+}
+const t=nowDT();
+['b1','b2'].forEach(id=>{
+  document.getElementById('fecha-'+id).value=t.fecha;
+  document.getElementById('hora-'+id).value=t.hora;
+});
+</script>
+</body>
+</html>
