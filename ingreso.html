@@ -201,8 +201,8 @@ textarea{resize:vertical;min-height:56px;}
           <label>Temperatura (°C)</label>
           <input type="number" step="0.1" placeholder="ej: 10.5" id="temp">
         </div>
-        <div class="form-group">
-          <label>Humedad (%)</label>
+        <div class="form-group" id="humi-group">
+          <label id="humi-label">Humedad (%) <span id="humi-hint" style="font-weight:400;text-transform:none;letter-spacing:0;color:#1abc9c;font-size:11px;"></span></label>
           <input type="number" step="0.1" placeholder="ej: 70.0" id="humi">
         </div>
         <div class="form-group full">
@@ -279,12 +279,33 @@ function checkCam(){
   const btn=document.getElementById('cam-btn');
   const inp=document.getElementById('cam-input');
   const lock=document.getElementById('cam-lock');
+  // Humedad opcional para B1·S1
+  const humiLabel=document.getElementById('humi-label');
+  const humiInput=document.getElementById('humi');
+  if(selBod==='b1' && selSen==='s1'){
+    humiLabel.innerHTML='Humedad (%) <span style="font-size:10px;color:#1abc9c;font-weight:700;background:#eafaf6;border-radius:3px;padding:1px 5px;">No aplica</span>';
+    humiInput.placeholder='Sin dato';
+    humiInput.style.background='#f4f6f7';
+    humiInput.style.color='#aaa';
+  } else {
+    humiLabel.textContent='Humedad (%)';
+    humiInput.placeholder='ej: 70.0';
+    humiInput.style.background='';
+    humiInput.style.color='';
+  }
   if(ready){
     btn.classList.add('enabled');
     inp.disabled=false;
     lock.style.display='none';
     const bodN=selBod==='b1'?'1':'2', senN=selSen==='s1'?'1':'2';
     document.getElementById('foto-title').textContent=`② Toma la foto — Bodega ${bodN} · Sensor ${senN}`;
+    // Mostrar hint opcional en humedad para B1·S1
+    const hint=document.getElementById('humi-hint');
+    if(selBod==='b1' && selSen==='s1'){
+      hint.textContent='(opcional — este sensor no la mide)';
+    } else {
+      hint.textContent='';
+    }
   } else {
     btn.classList.remove('enabled');
     inp.disabled=true;
@@ -341,7 +362,8 @@ async function saveRec(){
   const fecha=document.getElementById('fecha').value;
   const hora=document.getElementById('hora').value;
   const inspector=document.getElementById('inspector').value.trim();
-  if(!temp||!humi||!fecha||!hora){alert('Completa Fecha, Hora, Temperatura y Humedad.');return;}
+  if(!temp||!fecha||!hora){alert('Completa Fecha, Hora y Temperatura.');return;}
+  if(!(selBod==='b1' && selSen==='s1') && !humi){alert('Completa el campo de Humedad.');return;}
   if(!inspector){alert('Ingresa el nombre del inspector.');return;}
 
   // ── DETECCIÓN DE DUPLICADO ──
@@ -379,7 +401,7 @@ async function saveRec(){
     await push(ref(db,`lecturas/${selBod}/${selSen}`),{
       no,fecha,hora,inspector,
       temp:+parseFloat(temp).toFixed(1),
-      humi:+parseFloat(humi).toFixed(1),
+      humi: humi ? +parseFloat(humi).toFixed(1) : null,
       obs:document.getElementById('obs').value.trim(),
       ts:Date.now()
     });
