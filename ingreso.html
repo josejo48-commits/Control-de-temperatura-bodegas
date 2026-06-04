@@ -54,9 +54,12 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#eaecee;color:var(--
 .sen-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .pick-btn{border:2px solid var(--borde);border-radius:var(--radio);padding:11px 8px;text-align:center;cursor:pointer;background:var(--gris);font-size:14px;font-weight:700;color:var(--muted);transition:all .15s;}
 .pick-btn:hover{background:white;border-color:#b0afaa;}
-.pick-btn.sel-bod{border-color:var(--azul-c);background:var(--azul-l);color:var(--azul);}
-.pick-btn.sel-s1{border-color:var(--s1);background:var(--s1-l);color:var(--s1);}
-.pick-btn.sel-s2{border-color:var(--s2);background:var(--s2-l);color:var(--s2);}
+.pick-btn.sel-bod{border-color:var(--azul);background:var(--azul);color:white;}
+.pick-btn.sel-bod .pick-sub{color:rgba(255,255,255,.7);opacity:1;}
+.pick-btn.sel-s1{border-color:var(--s1);background:var(--s1);color:white;}
+.pick-btn.sel-s1 .pick-sub{color:rgba(255,255,255,.7);opacity:1;}
+.pick-btn.sel-s2{border-color:var(--s2);background:var(--s2);color:white;}
+.pick-btn.sel-s2 .pick-sub{color:rgba(255,255,255,.7);opacity:1;}
 .pick-sub{font-size:11px;font-weight:400;opacity:.75;margin-top:2px;}
 
 /* PASO 2 — FOTO */
