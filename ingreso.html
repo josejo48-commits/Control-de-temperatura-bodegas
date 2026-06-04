@@ -23,15 +23,17 @@ window.dispatchEvent(new Event('fb-ready'));
 </script>
 <style>
 :root{
-  --azul:#0f2d4a;--azul-c:#1a5276;--azul-l:#e8f0f7;
-  --verde:#0a4a3a;--verde-c:#0d7a5f;--acento:#1abc9c;--acento-l:#eafaf6;
-  --rojo:#922b21;--rojo-l:#fdedec;
-  --gris:#f4f6f7;--borde:#d5d8dc;--texto:#17202a;--muted:#5d6d7e;--radio:8px;
-  --s1:#3266ad; --s2:#e07b2a;
+  --azul:#0f2d4a; --azul-c:#1a5276; --azul-l:#e8f0f7;
+  --verde:#0a4a3a; --acento:#1abc9c; --acento-l:#eafaf6;
+  --rojo:#922b21; --rojo-l:#fdedec;
+  --gris:#f4f6f7; --borde:#d5d8dc; --texto:#17202a; --muted:#5d6d7e; --radio:8px;
+  --s1:#3266ad; --s1-l:#eef3fb;
+  --s2:#e07b2a; --s2-l:#fdf3ea;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:#eaecee;color:var(--texto);min-height:100vh;}
 
+/* TOP BAR */
 .top-bar{background:var(--azul);color:white;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.2);position:sticky;top:0;z-index:100;}
 .top-bar h1{font-size:17px;font-weight:700;}
 .top-bar p{font-size:11px;opacity:.55;margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
@@ -40,62 +42,59 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#eaecee;color:var(--
 .sync-dot.on{background:var(--acento);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-.page{max-width:720px;margin:0 auto;padding:24px 16px 60px;}
+.page{max-width:680px;margin:0 auto;padding:24px 16px 60px;}
 
-/* SELECTOR PRINCIPAL */
-.selector-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
-.sel-btn{border:2px solid var(--borde);border-radius:10px;padding:16px 12px;text-align:center;cursor:pointer;background:white;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:6px;}
-.sel-btn:hover{border-color:#b0afaa;background:var(--gris);}
-.sel-btn.active-b1s1{border-color:var(--s1);background:#eef3fb;color:var(--s1);}
-.sel-btn.active-b1s2{border-color:var(--s2);background:#fdf3ea;color:var(--s2);}
-.sel-btn.active-b2s1{border-color:var(--s1);background:#eef3fb;color:var(--s1);}
-.sel-btn.active-b2s2{border-color:var(--s2);background:#fdf3ea;color:var(--s2);}
-.sel-ico{font-size:24px;}
-.sel-bod{font-size:13px;font-weight:700;color:var(--texto);}
-.sel-sen{font-size:11px;color:var(--muted);}
-.sel-btn.active-b1s1 .sel-bod,.sel-btn.active-b1s2 .sel-bod,
-.sel-btn.active-b2s1 .sel-bod,.sel-btn.active-b2s2 .sel-bod{color:inherit;}
-.sel-btn.active-b1s1 .sel-sen,.sel-btn.active-b1s2 .sel-sen,
-.sel-btn.active-b2s1 .sel-sen,.sel-btn.active-b2s2 .sel-sen{color:inherit;opacity:.7;}
-
-.sensor-tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;margin-bottom:14px;}
-.tag-s1{background:#eef3fb;color:var(--s1);border:1px solid var(--s1);}
-.tag-s2{background:#fdf3ea;color:var(--s2);border:1px solid var(--s2);}
-
+/* CARD */
 .card{background:white;border:1px solid var(--borde);border-radius:12px;padding:20px 22px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
 .card-title{font-size:12px;font-weight:700;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px;color:var(--azul);border-bottom:2px solid var(--azul-l);padding-bottom:10px;}
 
-.preview-img{width:100%;max-height:200px;object-fit:contain;border-radius:var(--radio);border:1px solid var(--borde);margin-bottom:12px;display:none;}
-.foto-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;}
-.btn-foto{position:relative;border:2px dashed var(--borde);border-radius:var(--radio);padding:16px 10px;text-align:center;cursor:pointer;background:var(--gris);transition:background .15s;display:flex;flex-direction:column;align-items:center;gap:5px;}
-.btn-foto:hover{background:white;}
-.btn-foto input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.btn-foto .f-ico{font-size:26px;}
-.btn-foto .f-lbl{font-size:13px;font-weight:700;}
-.btn-foto .f-sub{font-size:11px;color:var(--muted);}
-.btn-foto.camara{border-color:var(--acento);background:var(--acento-l);}
-.btn-foto.camara .f-lbl{color:var(--verde);}
-.foto-hint{font-size:12px;color:var(--muted);text-align:center;margin-bottom:12px;}
+/* PASO 1 — SELECTOR BODEGA + SENSOR */
+.step-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
+.bod-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.sen-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.pick-btn{border:2px solid var(--borde);border-radius:var(--radio);padding:11px 8px;text-align:center;cursor:pointer;background:var(--gris);font-size:14px;font-weight:700;color:var(--muted);transition:all .15s;}
+.pick-btn:hover{background:white;border-color:#b0afaa;}
+.pick-btn.sel-bod{border-color:var(--azul-c);background:var(--azul-l);color:var(--azul);}
+.pick-btn.sel-s1{border-color:var(--s1);background:var(--s1-l);color:var(--s1);}
+.pick-btn.sel-s2{border-color:var(--s2);background:var(--s2-l);color:var(--s2);}
+.pick-sub{font-size:11px;font-weight:400;opacity:.75;margin-top:2px;}
+
+/* PASO 2 — FOTO */
+.foto-block{position:relative;}
+.cam-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;padding:28px 16px;border:2px dashed var(--borde);border-radius:var(--radio);background:var(--gris);cursor:not-allowed;transition:all .15s;position:relative;opacity:.45;}
+.cam-btn.enabled{cursor:pointer;opacity:1;border-color:var(--acento);background:var(--acento-l);}
+.cam-btn.enabled:hover{background:#d0f5ec;}
+.cam-btn input{position:absolute;inset:0;opacity:0;width:100%;height:100%;}
+.cam-btn input:not([disabled]){cursor:pointer;}
+.cam-ico{font-size:36px;line-height:1;}
+.cam-lbl{font-size:15px;font-weight:700;color:var(--verde);}
+.cam-sub{font-size:12px;color:var(--muted);}
+.cam-lock{font-size:12px;color:var(--muted);margin-top:4px;}
+.preview-img{width:100%;max-height:220px;object-fit:contain;border-radius:var(--radio);border:2px solid var(--acento);margin-bottom:12px;display:none;}
+
+/* PASO 3 — FORMULARIO (bloqueado hasta foto) */
+.form-block{opacity:.35;pointer-events:none;transition:opacity .25s;}
+.form-block.enabled{opacity:1;pointer-events:all;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+input,textarea{border:1.5px solid var(--borde);border-radius:7px;padding:9px 11px;font-size:14px;color:var(--texto);background:white;font-family:inherit;transition:border-color .15s;}
+input:focus,textarea:focus{outline:none;border-color:var(--azul-c);box-shadow:0 0 0 3px rgba(26,82,118,.1);}
+textarea{resize:vertical;min-height:56px;}
+
+.btn-save{width:100%;padding:13px;border:none;border-radius:var(--radio);font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--azul);color:white;}
+.btn-save:hover{background:var(--azul-c);}
+.btn-save:disabled{opacity:.5;cursor:not-allowed;}
+.btn-save.s1{background:var(--s1);}
+.btn-save.s1:hover{background:#1e4d8c;}
+.btn-save.s2{background:var(--s2);}
+.btn-save.s2:hover{background:#b5621e;}
 
 .status-bar{font-size:13px;padding:8px 12px;border-radius:var(--radio);display:none;margin-bottom:12px;align-items:center;gap:7px;}
 .status-bar.ok{background:var(--acento-l);color:var(--verde);display:flex;}
 .status-bar.error{background:var(--rojo-l);color:var(--rojo);display:flex;}
 .status-bar.saving{background:var(--azul-l);color:var(--azul-c);display:flex;}
-
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.form-group{display:flex;flex-direction:column;gap:5px;}
-.form-group.full{grid-column:1/-1;}
-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
-input,textarea{border:1.5px solid var(--borde);border-radius:7px;padding:9px 11px;font-size:14px;color:var(--texto);background:white;transition:border-color .15s;font-family:inherit;}
-input:focus,textarea:focus{outline:none;border-color:var(--azul-c);box-shadow:0 0 0 3px rgba(26,82,118,.1);}
-textarea{resize:vertical;min-height:60px;}
-
-.btn-save{width:100%;padding:13px;border:none;border-radius:var(--radio);font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;color:white;}
-.btn-save.s1{background:var(--s1);}
-.btn-save.s1:hover{background:#1e4d8c;}
-.btn-save.s2{background:var(--s2);}
-.btn-save.s2:hover{background:#b5621e;}
-.btn-save:disabled{opacity:.5;cursor:not-allowed;}
 
 /* ÚLTIMAS LECTURAS */
 .recent-title{font-size:11px;font-weight:700;color:var(--azul);margin-bottom:10px;text-transform:uppercase;letter-spacing:.7px;}
@@ -109,24 +108,24 @@ textarea{resize:vertical;min-height:60px;}
 .badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;}
 .badge-t{background:#fdecea;color:#7b241c;border:1px solid #f1948a;}
 .badge-h{background:var(--acento-l);color:var(--verde);border:1px solid #76d7c4;}
-.badge-s1{background:#eef3fb;color:var(--s1);border:1px solid var(--s1);font-size:10px;padding:1px 6px;}
-.badge-s2{background:#fdf3ea;color:var(--s2);border:1px solid var(--s2);font-size:10px;padding:1px 6px;}
+.badge-s1{background:var(--s1-l);color:var(--s1);border:1px solid var(--s1);font-size:10px;}
+.badge-s2{background:var(--s2-l);color:var(--s2);border:1px solid var(--s2);font-size:10px;}
 .recent-meta{font-size:12px;color:var(--muted);}
 .recent-inspector{font-size:12px;color:var(--azul-c);font-weight:700;}
 .empty-list{font-size:13px;color:var(--muted);text-align:center;padding:18px;}
 
-@media(max-width:520px){
+@media(max-width:480px){
   .form-grid{grid-template-columns:1fr;}
   .form-group.full{grid-column:1;}
-  .selector-grid{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
 <body>
+
 <div class="top-bar">
   <div>
     <h1>📝 Ingreso de Lecturas</h1>
-    <p>Bodegas Margarinas — 2 bodegas · 2 sensores cada una</p>
+    <p>Bodegas Margarinas</p>
   </div>
   <div class="sync-badge">
     <div class="sync-dot" id="sync-dot"></div>
@@ -136,51 +135,53 @@ textarea{resize:vertical;min-height:60px;}
 
 <div class="page">
 
-  <!-- SELECTOR DE BODEGA + SENSOR -->
-  <div class="selector-grid">
-    <div class="sel-btn" id="btn-b1s1" onclick="seleccionar('b1','s1')">
-      <div class="sel-ico">🏭</div>
-      <div class="sel-bod">Bodega 1</div>
-      <div class="sel-sen">Sensor 1</div>
+  <!-- PASO 1: SELECCIONAR BODEGA Y SENSOR -->
+  <div class="card">
+    <div class="card-title">① Selecciona bodega y sensor</div>
+
+    <div class="step-label">Bodega</div>
+    <div class="bod-row">
+      <div class="pick-btn" id="pbod1" onclick="pickBod(1)">
+        🏭 Bodega 1
+        <div class="pick-sub">Zona A</div>
+      </div>
+      <div class="pick-btn" id="pbod2" onclick="pickBod(2)">
+        🏗️ Bodega 2
+        <div class="pick-sub">Zona B</div>
+      </div>
     </div>
-    <div class="sel-btn" id="btn-b1s2" onclick="seleccionar('b1','s2')">
-      <div class="sel-ico">🏭</div>
-      <div class="sel-bod">Bodega 1</div>
-      <div class="sel-sen">Sensor 2</div>
-    </div>
-    <div class="sel-btn" id="btn-b2s1" onclick="seleccionar('b2','s1')">
-      <div class="sel-ico">🏗️</div>
-      <div class="sel-bod">Bodega 2</div>
-      <div class="sel-sen">Sensor 1</div>
-    </div>
-    <div class="sel-btn" id="btn-b2s2" onclick="seleccionar('b2','s2')">
-      <div class="sel-ico">🏗️</div>
-      <div class="sel-bod">Bodega 2</div>
-      <div class="sel-sen">Sensor 2</div>
+
+    <div class="step-label">Sensor (termohigrómetro)</div>
+    <div class="sen-row">
+      <div class="pick-btn" id="psen1" onclick="pickSen(1)">
+        🌡️ Sensor 1
+        <div class="pick-sub">Termohigrómetro 1</div>
+      </div>
+      <div class="pick-btn" id="psen2" onclick="pickSen(2)">
+        🌡️ Sensor 2
+        <div class="pick-sub">Termohigrómetro 2</div>
+      </div>
     </div>
   </div>
 
-  <!-- FORMULARIO DINÁMICO -->
-  <div id="form-area" style="display:none;">
-    <div class="card">
-      <div class="card-title" id="foto-title">📷 Foto del medidor</div>
-      <img id="preview-img" class="preview-img">
-      <div class="foto-btns">
-        <label class="btn-foto">
-          <div class="f-ico">📁</div><div class="f-lbl">Subir foto</div><div class="f-sub">Desde galería</div>
-          <input type="file" accept="image/*" onchange="handleImg(this)">
-        </label>
-        <label class="btn-foto camara">
-          <div class="f-ico">📷</div><div class="f-lbl">Tomar foto</div><div class="f-sub">Cámara del celular</div>
-          <input type="file" accept="image/*" capture="environment" onchange="handleImg(this)">
-        </label>
-      </div>
-      <p class="foto-hint">Toma la foto, lee el medidor e ingresa los valores abajo</p>
-      <div class="status-bar" id="status-bar"></div>
+  <!-- PASO 2: FOTO (se habilita al seleccionar) -->
+  <div class="card">
+    <div class="card-title" id="foto-title">② Toma la foto del medidor</div>
+    <img id="preview-img" class="preview-img">
+    <div class="cam-btn" id="cam-btn">
+      <div class="cam-ico">📷</div>
+      <div class="cam-lbl">Tomar foto</div>
+      <div class="cam-sub">Abre la cámara del celular</div>
+      <div class="cam-lock" id="cam-lock">⚠️ Selecciona bodega y sensor primero</div>
+      <input type="file" accept="image/*" capture="environment" id="cam-input" disabled onchange="handleFoto(this)">
     </div>
+    <div class="status-bar" id="status-bar"></div>
+  </div>
 
-    <div class="card">
-      <div class="card-title" id="form-title">✏️ Datos del registro</div>
+  <!-- PASO 3: DATOS (se habilita al tomar foto) -->
+  <div class="card">
+    <div class="card-title" id="form-title">③ Ingresa los valores del medidor</div>
+    <div class="form-block" id="form-block">
       <div class="form-grid">
         <div class="form-group full">
           <label>Inspector</label>
@@ -209,72 +210,91 @@ textarea{resize:vertical;min-height:60px;}
       </div>
       <button class="btn-save" id="btn-guardar" onclick="saveRec()">☁️ Guardar en la nube</button>
     </div>
+  </div>
 
-    <div class="card">
-      <div class="recent-title" id="recent-title">Últimas 8 lecturas</div>
-      <div class="recent-list" id="recent-list"><div class="empty-list">Sin lecturas aún</div></div>
-    </div>
+  <!-- ÚLTIMAS LECTURAS -->
+  <div class="card">
+    <div class="recent-title" id="recent-title">Últimas 8 lecturas</div>
+    <div class="recent-list" id="recent-list"><div class="empty-list">Selecciona bodega y sensor para ver las lecturas</div></div>
   </div>
 
 </div>
 
 <script>
-let currentBod = null, currentSen = null;
-let fbReady = false;
-let dbData = { b1:{s1:{},s2:{}}, b2:{s1:{},s2:{}} };
+let selBod=null, selSen=null, fotoTomada=false, fbReady=false;
+let dbData={b1:{s1:{},s2:{}},b2:{s1:{},s2:{}}};
 
-window.addEventListener('fb-ready', () => {
-  fbReady = true;
-  const {db,ref,onValue} = window._fb;
+window.addEventListener('fb-ready',()=>{
+  fbReady=true;
+  const {db,ref,onValue}=window._fb;
   document.getElementById('sync-dot').classList.add('on');
-  document.getElementById('sync-txt').textContent = 'en línea';
-  ['b1','b2'].forEach(b => ['s1','s2'].forEach(s => {
-    onValue(ref(db,`lecturas/${b}/${s}`), snap => {
-      dbData[b][s] = snap.val() || {};
-      if (currentBod===b && currentSen===s) renderList();
+  document.getElementById('sync-txt').textContent='en línea';
+  ['b1','b2'].forEach(b=>['s1','s2'].forEach(s=>{
+    onValue(ref(db,`lecturas/${b}/${s}`),snap=>{
+      dbData[b][s]=snap.val()||{};
+      if(selBod===b && selSen===s) renderList();
     });
   }));
 });
 
-function seleccionar(bod, sen) {
-  currentBod = bod; currentSen = sen;
-  // Reset clases
-  document.querySelectorAll('.sel-btn').forEach(b => b.className='sel-btn');
-  document.getElementById(`btn-${bod}${sen}`).classList.add(`active-${bod}${sen}`);
-  // Mostrar form
-  document.getElementById('form-area').style.display = 'block';
-  // Actualizar títulos
-  const bodNum = bod==='b1'?'1':'2', senNum = sen==='s1'?'1':'2';
-  const tag = sen==='s1'?'tag-s1':'tag-s2';
-  const color = sen==='s1'?'s1':'s2';
-  document.getElementById('foto-title').innerHTML = `📷 Foto — Bodega ${bodNum} · <span class="sensor-tag ${tag}">Sensor ${senNum}</span>`;
-  document.getElementById('form-title').innerHTML = `✏️ Datos — Bodega ${bodNum} · <span class="sensor-tag ${tag}">Sensor ${senNum}</span>`;
-  document.getElementById('recent-title').innerHTML = `Últimas 8 lecturas — Bodega ${bodNum} · Sensor ${senNum}`;
-  document.getElementById('btn-guardar').className = `btn-save ${color}`;
-  document.getElementById('btn-guardar').innerHTML = `☁️ Guardar — Bodega ${bodNum} · Sensor ${senNum}`;
-  // Fecha/hora
-  const t = nowDT();
-  document.getElementById('fecha').value = t.fecha;
-  document.getElementById('hora').value  = t.hora;
-  // Limpiar
-  ['temp','humi','obs'].forEach(f=>document.getElementById(f).value='');
-  document.getElementById('preview-img').style.display='none';
-  setStatus('','');
-  renderList();
+function pickBod(n){
+  selBod='b'+n; fotoTomada=false;
+  document.querySelectorAll('.bod-row .pick-btn').forEach(b=>b.classList.remove('sel-bod'));
+  document.getElementById('pbod'+n).classList.add('sel-bod');
+  resetFoto(); checkCam(); renderList();
 }
 
-function nowDT(){const d=new Date();return{fecha:d.toISOString().slice(0,10),hora:d.toTimeString().slice(0,5)};}
+function pickSen(n){
+  selSen='s'+n; fotoTomada=false;
+  document.querySelectorAll('.sen-row .pick-btn').forEach(b=>{b.classList.remove('sel-s1','sel-s2');});
+  document.getElementById('psen'+n).classList.add('sel-s'+n);
+  resetFoto(); checkCam(); renderList();
+}
 
-function handleImg(input){
-  const file=input.files[0];if(!file)return;
+function checkCam(){
+  const ready = selBod && selSen;
+  const btn=document.getElementById('cam-btn');
+  const inp=document.getElementById('cam-input');
+  const lock=document.getElementById('cam-lock');
+  if(ready){
+    btn.classList.add('enabled');
+    inp.disabled=false;
+    lock.style.display='none';
+    const bodN=selBod==='b1'?'1':'2', senN=selSen==='s1'?'1':'2';
+    document.getElementById('foto-title').textContent=`② Toma la foto — Bodega ${bodN} · Sensor ${senN}`;
+  } else {
+    btn.classList.remove('enabled');
+    inp.disabled=true;
+    lock.style.display='block';
+  }
+}
+
+function resetFoto(){
+  fotoTomada=false;
+  document.getElementById('preview-img').style.display='none';
+  document.getElementById('form-block').classList.remove('enabled');
+  document.getElementById('cam-btn').querySelector('.cam-lbl').textContent='Tomar foto';
+  setStatus('','');
+}
+
+function handleFoto(input){
+  const file=input.files[0]; if(!file) return;
   const reader=new FileReader();
   reader.onload=e=>{
     const prev=document.getElementById('preview-img');
-    prev.src=e.target.result;prev.style.display='block';
+    prev.src=e.target.result; prev.style.display='block';
+    fotoTomada=true;
+    document.getElementById('form-block').classList.add('enabled');
+    document.getElementById('cam-btn').querySelector('.cam-lbl').textContent='📸 Foto tomada — toca para repetir';
     const t=nowDT();
     document.getElementById('fecha').value=t.fecha;
     document.getElementById('hora').value=t.hora;
-    setStatus('ok','Foto cargada — ingresa los valores y guarda.');
+    const bodN=selBod==='b1'?'1':'2', senN=selSen==='s1'?'1':'2';
+    const senColor=selSen==='s1'?'s1':'s2';
+    document.getElementById('form-title').textContent=`③ Valores del medidor — Bodega ${bodN} · Sensor ${senN}`;
+    document.getElementById('btn-guardar').className=`btn-save ${senColor}`;
+    document.getElementById('btn-guardar').textContent=`☁️ Guardar — Bodega ${bodN} · Sensor ${senN}`;
+    setStatus('ok','✅ Foto tomada — ingresa los valores y guarda.');
   };
   reader.readAsDataURL(file);
 }
@@ -287,9 +307,11 @@ function setStatus(type,msg){
   el.innerHTML=(type==='ok'?'✅':type==='saving'?'⏳':'⚠️')+' '+msg;
 }
 
+function nowDT(){const d=new Date();return{fecha:d.toISOString().slice(0,10),hora:d.toTimeString().slice(0,5)};}
+
 async function saveRec(){
   if(!fbReady){alert('Sin conexión. Espera.');return;}
-  if(!currentBod){alert('Selecciona bodega y sensor primero.');return;}
+  if(!fotoTomada){alert('Debes tomar la foto primero.');return;}
   const temp=document.getElementById('temp').value;
   const humi=document.getElementById('humi').value;
   const fecha=document.getElementById('fecha').value;
@@ -301,35 +323,40 @@ async function saveRec(){
   btn.disabled=true;
   setStatus('saving','Guardando en la nube...');
   const {db,ref,push}=window._fb;
-  const no=Object.keys(dbData[currentBod][currentSen]||{}).length+1;
+  const no=Object.keys(dbData[selBod][selSen]||{}).length+1;
   try{
-    await push(ref(db,`lecturas/${currentBod}/${currentSen}`),{
+    await push(ref(db,`lecturas/${selBod}/${selSen}`),{
       no,fecha,hora,inspector,
       temp:+parseFloat(temp).toFixed(1),
       humi:+parseFloat(humi).toFixed(1),
       obs:document.getElementById('obs').value.trim(),
       ts:Date.now()
     });
-    setStatus('ok','✅ Guardado correctamente.');
+    setStatus('ok','✅ Lectura #'+no+' guardada correctamente.');
+    // Limpiar para siguiente lectura — mantiene bodega y sensor
     ['temp','humi','obs'].forEach(f=>document.getElementById(f).value='');
     document.getElementById('preview-img').style.display='none';
+    document.getElementById('cam-btn').querySelector('.cam-lbl').textContent='Tomar foto';
+    document.getElementById('form-block').classList.remove('enabled');
+    fotoTomada=false;
   }catch(e){setStatus('error','Error: '+e.message);}
   btn.disabled=false;
 }
 
 function renderList(){
-  if(!currentBod||!currentSen)return;
   const el=document.getElementById('recent-list');
-  const arr=Object.values(dbData[currentBod][currentSen]||{}).sort((a,b)=>a.ts-b.ts);
-  const senClass = currentSen==='s1'?'s1':'s2';
-  const senBadge = currentSen==='s1'
-    ?'<span class="badge badge-s1">Sensor 1</span>'
-    :'<span class="badge badge-s2">Sensor 2</span>';
+  if(!selBod||!selSen){el.innerHTML='<div class="empty-list">Selecciona bodega y sensor para ver las lecturas</div>';return;}
+  const arr=Object.values(dbData[selBod][selSen]||{}).sort((a,b)=>a.ts-b.ts);
+  const bodN=selBod==='b1'?'1':'2', senN=selSen==='s1'?'1':'2';
+  document.getElementById('recent-title').textContent=`Últimas 8 lecturas — Bodega ${bodN} · Sensor ${senN}`;
+  const sc=selSen==='s1'?'s1':'s2';
+  const sb=selSen==='s1'?'badge-s1':'badge-s2';
+  const sl=selSen==='s1'?'Sensor 1':'Sensor 2';
   if(!arr.length){el.innerHTML='<div class="empty-list">Sin lecturas aún</div>';return;}
   el.innerHTML=arr.slice(-8).reverse().map(r=>`
-    <div class="recent-row ${senClass}">
+    <div class="recent-row ${sc}">
       <div class="recent-top">
-        <span class="recent-num">#${r.no} &nbsp;${r.fecha} &nbsp;${r.hora} &nbsp;${senBadge}</span>
+        <span class="recent-num">#${r.no} &nbsp;${r.fecha} &nbsp;${r.hora} &nbsp;<span class="badge ${sb}">${sl}</span></span>
         <div class="recent-vals">
           <span class="badge badge-t">${r.temp}°C</span>
           <span class="badge badge-h">${r.humi}%</span>
