@@ -337,10 +337,11 @@ function renderTabla(b,s,data){
   const el=document.getElementById(`twrap-${b}-${s}`);
   if(!el)return;
   if(!data.length){el.innerHTML='<p style="padding:16px;text-align:center;color:#5d6d7e;font-size:13px;">Sin datos para este rango</p>';return;}
+  const dataDesc=[...data].reverse();
   el.innerHTML=`<table>
     <thead><tr><th>No.</th><th>Fecha</th><th>Hora</th><th>Temp.</th><th>Humedad</th><th>Inspector</th><th>Observaciones</th></tr></thead>
-    <tbody>${data.map(r=>`<tr>
-      <td>${r.no}</td><td>${fmtF(r.fecha)}</td><td>${r.hora}</td>
+    <tbody>${dataDesc.map((r,i)=>`<tr>
+      <td style="color:var(--muted);font-size:12px;">${data.length - i}</td><td>${fmtF(r.fecha)}</td><td>${r.hora}</td>
       <td><span class="badge badge-t">${r.temp}°C</span></td>
       <td><span class="badge badge-h">${r.humi?r.humi+'%':'—'}</span></td>
       <td style="color:#1a5276;font-weight:600;">${r.inspector||'—'}</td>
