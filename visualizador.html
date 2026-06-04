@@ -434,6 +434,19 @@ function renderHistorico(b, datos) {
 
 renderHistorico('b1', HIST_B1);
 renderHistorico('b2', HIST_B2);
+
+function switchTbl(b,s){
+  ['s1','s2'].forEach(x=>{
+    const tab=document.getElementById(`ttab-${b}-${x}`);
+    const panel=document.getElementById(`tpanel-${b}-${x}`);
+    if(tab) tab.className='tab-tbl';
+    if(panel) panel.classList.remove('active');
+  });
+  const selTab=document.getElementById(`ttab-${b}-${s}`);
+  const selPanel=document.getElementById(`tpanel-${b}-${s}`);
+  if(selTab) selTab.classList.add(`active-${s}`);
+  if(selPanel) selPanel.classList.add('active');
+}
 </script>
 </body>
 </html>
