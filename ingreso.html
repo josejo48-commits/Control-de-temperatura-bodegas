@@ -331,6 +331,7 @@ function setStatus(type,msg){
 }
 
 function nowDT(){const d=new Date();return{fecha:d.toISOString().slice(0,10),hora:d.toTimeString().slice(0,5)};}
+function fmtF(f){if(!f)return'';const p=f.split('-');return p.length===3?p[2]+'/'+p[1]:f;}
 
 async function saveRec(){
   if(!fbReady){alert('Sin conexión. Espera.');return;}
@@ -404,10 +405,11 @@ function renderList(){
   const sl=selSen==='s1'?'Sensor 1':'Sensor 2';
   if(!arr.length){el.innerHTML='<div class="empty-list">Sin lecturas aún</div>';return;}
   const total=arr.length;
-  el.innerHTML=arr.slice(-8).reverse().map((r,i)=>`
+  const ultimas8=arr.slice(-8).reverse();
+  el.innerHTML=ultimas8.map((r,i)=>`
     <div class="recent-row ${sc}">
       <div class="recent-top">
-        <span class="recent-num">#${total-i} &nbsp;${r.fecha} &nbsp;${r.hora} &nbsp;<span class="badge ${sb}">${sl}</span></span>
+        <span class="recent-num">#${total-i} &nbsp;${fmtF(r.fecha)} &nbsp;${r.hora} &nbsp;<span class="badge ${sb}">${sl}</span></span>
         <div class="recent-vals">
           <span class="badge badge-t">${r.temp}°C</span>
           <span class="badge badge-h">${r.humi}%</span>
