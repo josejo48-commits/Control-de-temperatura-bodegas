@@ -135,6 +135,12 @@ textarea{resize:vertical;min-height:56px;}
 
 <div class="page">
 
+  <!-- INSPECTOR (arriba, compartido para todos los sensores) -->
+  <div class="card">
+    <div class="card-title">👤 Inspector</div>
+    <input type="text" id="inspector" placeholder="Nombre del inspector" style="width:100%;border:1.5px solid var(--borde);border-radius:7px;padding:10px 12px;font-size:15px;font-family:inherit;">
+  </div>
+
   <!-- PASO 1: SELECCIONAR BODEGA Y SENSOR -->
   <div class="card">
     <div class="card-title">① Selecciona bodega y sensor</div>
@@ -183,10 +189,6 @@ textarea{resize:vertical;min-height:56px;}
     <div class="card-title" id="form-title">③ Ingresa los valores del medidor</div>
     <div class="form-block" id="form-block">
       <div class="form-grid">
-        <div class="form-group full">
-          <label>Inspector</label>
-          <input type="text" id="inspector" placeholder="Nombre del inspector">
-        </div>
         <div class="form-group">
           <label>Fecha</label>
           <input type="date" id="fecha">
@@ -197,11 +199,11 @@ textarea{resize:vertical;min-height:56px;}
         </div>
         <div class="form-group">
           <label>Temperatura (°C)</label>
-          <input type="number" step="0.1" placeholder="22.5" id="temp">
+          <input type="number" step="0.1" placeholder="ej: 10.5" id="temp">
         </div>
         <div class="form-group">
           <label>Humedad (%)</label>
-          <input type="number" step="0.1" placeholder="65.0" id="humi">
+          <input type="number" step="0.1" placeholder="ej: 70.0" id="humi">
         </div>
         <div class="form-group full">
           <label>Observaciones</label>
@@ -233,6 +235,7 @@ window.addEventListener('fb-ready',()=>{
     onValue(ref(db,`lecturas/${b}/${s}`),snap=>{
       dbData[b][s]=snap.val()||{};
       if(selBod===b && selSen===s) renderList();
+      actualizarIndicadoresSensores();
     });
   }));
 });
@@ -242,6 +245,7 @@ function pickBod(n){
   document.querySelectorAll('.bod-row .pick-btn').forEach(b=>b.classList.remove('sel-bod'));
   document.getElementById('pbod'+n).classList.add('sel-bod');
   resetFoto(); checkCam(); renderList();
+  actualizarIndicadoresSensores();
 }
 
 function pickSen(n){
@@ -249,6 +253,25 @@ function pickSen(n){
   document.querySelectorAll('.sen-row .pick-btn').forEach(b=>{b.classList.remove('sel-s1','sel-s2');});
   document.getElementById('psen'+n).classList.add('sel-s'+n);
   resetFoto(); checkCam(); renderList();
+}
+
+function actualizarIndicadoresSensores(){
+  const hoy = new Date().toISOString().slice(0,10);
+  if(!selBod) return;
+  ['s1','s2'].forEach((s,i)=>{
+    const n = i+1;
+    const registros = Object.values(dbData[selBod][s]||{});
+    const tieneHoy = registros.some(r => r.fecha === hoy);
+    const btn = document.getElementById('psen'+n);
+    const sub = btn.querySelector('.pick-sub');
+    if(tieneHoy){
+      sub.innerHTML = '✅ Ya ingresado hoy';
+      btn.style.borderColor = '#1abc9c';
+    } else {
+      sub.innerHTML = 'Termohigrómetro '+n;
+      btn.style.borderColor = '';
+    }
+  });
 }
 
 function checkCam(){
@@ -319,6 +342,33 @@ async function saveRec(){
   const inspector=document.getElementById('inspector').value.trim();
   if(!temp||!humi||!fecha||!hora){alert('Completa Fecha, Hora, Temperatura y Humedad.');return;}
   if(!inspector){alert('Ingresa el nombre del inspector.');return;}
+
+  // ── DETECCIÓN DE DUPLICADO ──
+  const registros = Object.values(dbData[selBod][selSen]||{});
+  const bodN=selBod==='b1'?'1':'2', senN=selSen==='s1'?'1':'2';
+  // Buscar si ya hay una lectura en la misma fecha y dentro de 30 minutos
+  const horaMin = hora.split(':').map(Number);
+  const horaMinutos = horaMin[0]*60 + horaMin[1];
+  const duplicado = registros.find(r => {
+    if(r.fecha !== fecha) return false;
+    const rMin = r.hora.split(':').map(Number);
+    const rMinutos = rMin[0]*60 + rMin[1];
+    return Math.abs(rMinutos - horaMinutos) <= 30;
+  });
+  if(duplicado){
+    const confirmar = confirm(
+      `⚠️ ATENCIÓN\n\n` +
+      `Ya existe una lectura en Bodega ${bodN} · Sensor ${senN}\n` +
+      `para esta fecha y hora:\n\n` +
+      `📅 ${duplicado.fecha}  🕐 ${duplicado.hora}\n` +
+      `🌡️ ${duplicado.temp}°C  💧 ${duplicado.humi}%\n` +
+      `👤 ${duplicado.inspector}\n\n` +
+      `¿Seguro que quieres guardar otra lectura?\n` +
+      `(Toca Cancelar si fue un error de sensor)`
+    );
+    if(!confirmar) return;
+  }
+
   const btn=document.getElementById('btn-guardar');
   btn.disabled=true;
   setStatus('saving','Guardando en la nube...');
