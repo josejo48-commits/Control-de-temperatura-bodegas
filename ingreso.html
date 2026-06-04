@@ -403,10 +403,11 @@ function renderList(){
   const sb=selSen==='s1'?'badge-s1':'badge-s2';
   const sl=selSen==='s1'?'Sensor 1':'Sensor 2';
   if(!arr.length){el.innerHTML='<div class="empty-list">Sin lecturas aún</div>';return;}
-  el.innerHTML=arr.slice(-8).reverse().map(r=>`
+  const total=arr.length;
+  el.innerHTML=arr.slice(-8).reverse().map((r,i)=>`
     <div class="recent-row ${sc}">
       <div class="recent-top">
-        <span class="recent-num">#${r.no} &nbsp;${r.fecha} &nbsp;${r.hora} &nbsp;<span class="badge ${sb}">${sl}</span></span>
+        <span class="recent-num">#${total-i} &nbsp;${r.fecha} &nbsp;${r.hora} &nbsp;<span class="badge ${sb}">${sl}</span></span>
         <div class="recent-vals">
           <span class="badge badge-t">${r.temp}°C</span>
           <span class="badge badge-h">${r.humi}%</span>
