@@ -2,7 +2,14 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ingreso Bodegas">
+  <meta name="theme-color" content="#922b21">
+  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAEVElEQVR4nO3dPXLTUBSG4WsPFTugjCnjbVEmi4lLtpWUJCU7oA0FEyYY29HPleSr73lKIIpmOK+O5DBiUxb2cHvzuvQ5sJz7p5fNkt9/9m9u4Llk7iBm+WaGniHmiGHSb2DwqWHKECY5sMFnClOEUPWABp851AyhyoEMPkuoEcJ27AEMP0upMXujAjD8LG3sDA5aIQafazTklqj3BjD8XKshs9krAMPPtes7o50DMPy0os+sdrpnMvxtuXt8/jHk6w773dfa57KkLs8Eoz8G5boMHf6xX9uqDwNw9W9HjQFeUwRdZvdiAIa/HTUHNymCswEY/nZMMbApEXgGINrJAFz9WZtzM20DEO2/AFz9WatTs20DEO2fAFz9WbvjGbcBiPY3AFd/UryfdRuAaAIg2rYUtz/keZt5G4BoAiCaAIi2df9Pqofbm1cbgGgCIJoAiCYAogmAaJ+WPoE18UKq9tgAlXghVZsEUIEXUrVLACN5IVXbBDCCF1K1TwBEEwDRBEA0PwfgorvH55/Hv3bY774scS5TsAE45/Op4S/lTxTnfq81AuCUz13+0BoiEADHOg3/m9YjEADRBMB7va7+b1reAgIgmgCIJgCiCYBoAuC9X0O+qOWfDAuAaALgWK8t0PLVvxQBcFqnCFof/lIEwHm/zg34Yb/7sobhL8U/h+YDaxn0c2wAogmAaAIg2iqeAbySkKGa3wBeScgYTQfglYSM1WwAXklIDU0G4JWE1NJkAFCLAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIFqTARz2u6/XcEzn0b4mAyil7l/QmGM5j7Y1G0Apdf6iHKP+MVrSdAClrOOqucbzaMXm4fbmdemTgKV8mvLgd4/P36Y8PhkO+933qY7d/C0QjCEAonkGIJoNQDQBEE0ARBMA0QRANAEQTQBEEwDRBEA0ARBNAEQTANEEQDQBEE0ARBMA0bb3Ty+bpU8ClnD/9LKxAYgmAKIJgGjbUv7cCy19IjCnt5m3AYgmAKL9DcBtECnez7oNQLR/ArAFWLvjGbcBiPZfALYAa3Vqtm0Aop0MwBZgbc7NtA1AtLMB2AKsxaVZvrgBREDrPprhD2+BRECrusyuZwCidQrAFqA1XWe28wYQAa3oM6u9boFEwLXrO6O9nwFEwLUaMpujhtn/Mcw1GHNRHvUpkG3A0sbO4OiPQUXAUmrMXtXhdUvEHGpedCe5eguBKUxxtzHp7YsQqGHK2+xZ7t+FwBBzPF/O/gArBi6Z+0OVxT/BEUS2pT9F/A1Zb0qCUM43lgAAAABJRU5ErkJggg==">
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIkluZ3Jlc28gQm9kZWdhcyBNYXJnYXJpbmFzIiwgInNob3J0X25hbWUiOiAiSW5ncmVzbyIsICJzdGFydF91cmwiOiAiLi9pbmdyZXNvLmh0bWwiLCAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwgImJhY2tncm91bmRfY29sb3IiOiAiIzkyMmIyMSIsICJ0aGVtZV9jb2xvciI6ICIjOTIyYjIxIiwgImljb25zIjogW3sic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBTUFBQUFEQUNBWUFBQUJTM0d3SEFBQUVWRWxFUVZSNG5PM2RQWExUVUJTRzRXc1BGVHVnakNuamJWRW1pNGxMdHBXVUpDVTdvQTBGRXlZWTI5SFBsZVNyNzNsS0lJcG1PSytPNURCaVV4YjJjSHZ6dXZRNXNKejdwNWZOa3Q5LzltOXU0TGxrN2lCbStXYUduaUhtaUdIU2IyRHdxV0hLRUNZNXNNRm5DbE9FVVBXQUJwODUxQXloeW9FTVBrdW9FY0oyN0FFTVAwdXBNWHVqQWpEOExHM3NEQTVhSVFhZmF6VGtscWozQmpEOFhLc2hzOWtyQU1QUHRlczdvNTBETVB5MG9zK3NkcnBuTXZ4dHVYdDgvakhrNnc3NzNkZmE1N0trTHM4RW96OEc1Ym9NSGY2eFg5dXFEd053OVc5SGpRRmVVd1JkWnZkaUFJYS9IVFVITnltQ3N3RVkvblpNTWJBcEVYZ0dJTnJKQUZ6OVdadHpNMjBERU8yL0FGejlXYXRUczIwREVPMmZBRno5V2J2akdiY0JpUFkzQUZkL1VyeWZkUnVBYUFJZzJyWVV0ei9rZVp0NUc0Qm9BaUNhQUlpMmRmOVBxb2ZibTFjYmdHZ0NJSm9BaUNZQW9nbUFhSitXUG9FMThVS3E5dGdBbFhnaFZac0VVSUVYVXJWTEFDTjVJVlhiQkRDQ0YxSzFUd0JFRXdEUkJFQTBQd2Znb3J2SDU1L0h2M2JZNzc0c2NTNVRzQUU0NS9PcDRTL2xUeFRuZnE4MUF1Q1V6MTMrMEJvaUVBREhPZzMvbTlZakVBRFJCTUI3dmE3K2IxcmVBZ0lnbWdDSUpnQ2lDWUJvQXVDOVgwTytxT1dmREF1QWFBTGdXSzh0MFBMVnZ4UUJjRnFuQ0ZvZi9sSUV3SG0vemczNFliLzdzb2JoTDhVL2grWURheG4wYzJ3QW9nbUFhQUlnMmlxZUFieVNrS0dhM3dCZVNjZ1lUUWZnbFlTTTFXd0FYa2xJRFUwRzRKV0UxTkprQUZDTEFJZ21BS0lKZ0dnQ0lKb0FpQ1lBb2dtQWFBSWdtZ0NJSmdDaUNZQm9BaUNhQUlnbUFLSUpnR2dDSUpvQWlDWUFvZ21BYUFJZ21nQ0lKZ0NpQ1lCb0FpQ2FBSWdtQUtJSmdHZ0NJSm9BaUNZQW9nbUFhQUlnbWdDSUpnQ2lDWUJvQWlDYUFJZ21BS0lKZ0dnQ0lKb0FpQ1lBb2dtQWFBSWdtZ0NJSmdDaUNZQm9BaUNhQUlnbUFLSUpnR2dDSUpvQWlDWUFvZ21BYUFJZ21nQ0lKZ0NpQ1lCb0FpQ2FBSWdtQUtJSmdHZ0NJRnFUQVJ6MnU2L1hjRXpuMGI0bUF5aWw3bC9RbUdNNWo3WTFHMEFwZGY2aUhLUCtNVnJTZEFDbHJPT3F1Y2J6YU1YbTRmYm1kZW1UZ0tWOG12TGdkNC9QMzZZOFBoa08rOTMzcVk3ZC9DMFFqQ0VBb25rR0lKb05RRFFCRUUwQVJCTUEwUVJBTkFFUVRRQkVFd0RSQkVBMEFSQk5BRVFUQU5FRVFEUUJFRTBBUkJNQTBiYjNUeSticFU4Q2xuRC85TEt4QVlnbUFLSUpnR2piVXY3Y0N5MTlJakNudDVtM0FZZ21BS0w5RGNCdEVDbmV6N29OUUxSL0FyQUZXTHZqR2JjQmlQWmZBTFlBYTNWcXRtMEFvcDBNd0JaZ2JjN050QTFBdExNQjJBS3N4YVZadnJnQlJFRHJQcHJoRDIrQlJFQ3J1c3l1WndDaWRRckFGcUExWFdlMjh3WVFBYTNvTTZ1OWJvRkV3TFhyTzZPOW53RkV3TFVhTXB1amh0bi9NY3cxR0hOUkh2VXBrRzNBMHNiTzRPaVBRVVhBVW1yTVh0WGhkVXZFSEdwZWRDZTVlZ3VCS1V4eHR6SHA3WXNRcUdISzIreFo3dCtGd0JCelBGL08vZ0FyQmk2WiswT1Z4VC9CRVVTMnBUOUYvQTFaYjBxQ1VNNDNsZ0FBQUFCSlJVNUVya0pnZ2c9PSIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIn0sIHsic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBZ0FBQUFJQUNBWUFBQUQwZU5UNkFBQU9jVWxFUVZSNG5PM2RNWElVU1JiSDRZTEFtaHVNaVREUnRkWVVoMEhtWGt0am9qSG5CdXV5QmxGTUlWcFN0N29xODJYK3Y4L2VRSmsxRWJ4ZnZXNjA3eGFhK3ZyNTQvZmVad0NvNk10ZmY3L3JmWVlrSHZZQkRIbUFmWW1EL1htZ1Z6THNBZm9RQmRmeDhDNWs0QVBVSkFndTQyR2R3ZEFIR0lzWWVKMEhkSUtCRHpBWFFmQTdEMlRENEFlWW14RDRWL3lETVBRQk1xWEhRT3psRFg0QWxpVTNCT0l1YmZBRGNFcGFDRVJjMXRBSDRCSUpNVEQxQlExK0FLNHhjd2k4NzMyQW94aitBRnhyNWxreVhkbk0vQjhMZ0g1bTJ3Wk1jeG1ESDRBV1pnbUI0UzloOEFQUXcrZ2hNUFIzQUF4L0FIb1pmUVlOV1MralAzUUE1akxpTm1DNERZRGhEMEExSTg2bW9RSmd4QWNNUUliUlp0UVFLNHZSSGlvQTJVYjRTS0Q4QnNEd0IyQTBJOHl1MGdFd3dnTUVnRk9xejdDU0s0cnFEdzBBTGxIeEk0RnlHd0RESDREWlZKeHRwUUtnNGdNQ2dEMVVtM0ZsQXFEYWd3R0F2VldhZFNVQ29OSURBWUFqVlpsNTNRT2d5b01BZ0ZZcXpMNnVBVkRoQVFCQUQ3MW5ZTGNBNkgxeEFPaXQ1eXpzRWdDR1B3RDgwR3NtTmc4QXd4OEFmdFZqTmpZTkFNTWZBRTVyUFNPYkJZRGhEd0F2YXprcm0veHVZc01mNk8zdTRmRmJyNTk5ZjN2enFkZlBaa3d0L3I4RER2OEJoai9RUzgraC94d3h3TG1Pam9CRC8zRERIK2loNHVCL1NnaHdqaU1qb1B0dkFnVFkwd2pEZjFuR09TZnpPcXdzdlAwRExZMDhVRzBEZU1sUlc0QkROZ0NHUDlEU3lNTi9XY1kvUDhjNmFxYnVIZ0NHUHdEczY0alo2anNBd05CbWVYdWU1UjZNWTljQThQWVB0RFRiMEp6dFB1eHI3eG03V3dBWS9nQndyRDFuN1M0QllQZ0RyYzM2dGp6cnZkalBYalBYZHdBQUlORFZBZUR0SHdEYTJtUDJYaFVBaGovUXcreHI4dG52eHo2dW5jRStBZ0NBUUc4T0FHLy9BTkRYTmJQWUJnQUFBcjBwQUx6OUEwQU5iNTNKTmdBQUVPamlBUEQyRHdDMXZHVTJYeFFBaGo4QTFIVHBqUFlSQUFBRU9qc0F2UDBEUUcyWHpHb2JBQUFJSkFBQUlOQlpBV0Q5RHdCak9IZG0yd0FBUUtCWEE4RGJQd0NNNVp6WmJRTUFBSUZlREFCdi93QXdwdGRtdUEwQUFBUVNBQUFRNk5rQXNQNEhnTEc5Tk10dEFBQWcwTWtBOFBZUEFITjRicWJiQUFCQUlBRUFBSUVFQUFBRStpMEFmUDRQQUhNNU5kdHRBQUFna0FBQWdFQy9CSUQxUHdETTZlbU10d0VBZ0VBQ0FBQUNDUUFBQ1BRekFIeitEd0J6Mjg1Nkd3QUFDQ1FBQUNDUUFBQ0FRQUlBQUFLOVh4WmZBQVNBRk92TXR3RUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFLOTkwOEFBU0RMMTg4ZnY5c0FBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJEb1ErOERRS3E3aDhkdnZYNzIvZTNOcDE0L0c2aEJBRUJEUFlmKzF2WWNZZ0F5Q1FCb29NcmdQMlU5bXhDQUxMNERBQWVyUFB5M1Jqa25zQThiQURqSWlBUFZOZ0J5MkFEQUFVWWMvbHVqbng5NG5RQUFnRUFDQUhZMnk5dnpMUGNBVGhNQXNLUFpodVpzOXdIK0pRQUFJSkFBZ0ozTStyWTg2NzBnblFBQWdFQUNBQUFDQ1FEWXdleHI4dG52QjRrRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCUHZRK0FBRG51WHQ0L09lMS84Mzk3YzJmTGM3QytBUUFRR0huRFAzbi92ZGlnSmNJQUlDQ0xoMzhMLzBaUW9CVEJBQkFMWC9zL1FjS0FVN3hKVUNBT25ZZi9sdDdiQldZaHdBQXFPSFE0YjhTQWF3RUFFQi9UWWIvU2dTd0xBSUFvTGVtdzM4bEFoQUFBUDEwR2Y0ckVaQk5BQUQwMFhYNHIwUkFMZ0VBQUlFRUFFQjdKZDcrVjdZQW1RUUFBQVFTQUFCdGxYcjdYOWtDNUJFQUFCQklBQUJBSUFFQTBFN0o5Zi9LeHdCWkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQVFEdi82MzJBbDl6ZjN2elord3kwSXdBQUlKQUFBSUJBQWdDZ3JaSWZBMWovNXhFQUFCQklBQUMwVjJvTDRPMC9rd0FBZ0VBQ0FLQ1BFbHNBYi8rNUJBQkFQMTBqd1BEUEpnQUErdW9TQVlZL0FnQ2d2NllSWVBpekxBSUFvSW9tRVdENHN4SUFBSFVjR2dHR1Axc2ZlaDhBZ0Yrc0VmREhYbitnd2M4cEFnQ2dvSFZvM3owOC9uUHRud0duQ0FDQXdyWkQvSndZTVBRNWx3QUFHSVRoenA1OENSQUFBZ2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDQ1FBQUNBUUg0UkVEL2RQVHgrNi9XejcyOXZQdlg2MlFDSkJFQzRua04vYTNzT01RQndQQUVRcXNyZ1AyVTlteEFBT0k3dkFBU3FQUHkzUmprbndJaHNBSUtNT0ZCdEF3Q09ZUU1RWXNUaHZ6WDYrUUdxRVFBQUVFZ0FCSmpsN1htV2V3QlVJQUFtTjl2UW5PMCtBTDBJQUFBSUpBQW1OdXZiOHF6M0FtaEpBQUJBSUFFQUFJRUV3S1JtWDVQUGZqK0Fvd2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBQWdBQUFna0FBQWdrQUFBZ2tBQUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFJSkFBQUlKQUFBSUpBQUFJQkFBZ0FBQWdrQUFBZ2tBQUFna0FBQWdFQUNBQUFDQ1FBQUNDUUFBQ0NRQUFDQVFBSUFBQUlKQUFBSUpBQUFJSkFBQUlCQUFnQUFBZ2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBQWdBQUFna0FBQWdrQUFBZ2tBQUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFJSkFBQUlKQUFBSUpBQUFJQkFBZ0FBQWdrQUFBZ2tBQUFna0FBQWdFQUNBQUFDQ1FBQUNDUUFBQ0NRQUFDQVFBSUFBQUlKQUFBSUpBQUFJSkFBQUlCQUFnQUFBZ2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBQWdBQUFna0FBQWdrQUFBZ2tBQUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFJSkFBQUlKQUFBSUpBQUFJQkFBZ0FBQWdrQUFBZ2tBQUFna0FBQWdFQUNBQUFDQ1FBQUNDUUFBQ0NRQUFDQVFBSUFBQUlKQUFBSUpBQUFJSkFBQUlCQUFnQUFBZ2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBQWdBQUFna0FBQWdrQUFBZ2tBQUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFJSkFBQUlKQUFBSUpBQUFJQkFBZ0FBQWdrQUFBZ2tBQUFna0FBQWdFQUNBQUFDQ1FBQUNDUUFBQ0NRQUFDQVFBSUFBQUlKQUFBSUpBQUFJSkFBQUlCQUFnQUFBZ2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBQWdBQUFna0FBQWdrQUFBZ2tBQUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFJSkFBQUlKQUFBSUpBQUFJQkFBZ0FBQWdrQUFBZ2tBQ1oxZjN2enFmY1pqbFR0ZnRYT3M3ZHE5NnQybnIzTmZqOXFFQUFBRUVnQUFFQWdBVEN4V2RlSVZlOVY5VnpYcW5xdnF1ZTYxcXozb2g0QkFBQ0JCTURrWm51YnFINmY2dWU3VlBYN1ZEL2ZwV2E3RDdVSmdBQ3ovS1V5eWoxR09lZHJScm5IS09kOHpTejNZQndDQUFBQ0NZQVFvNzlkakhiKzBjNzcxR2puSCsyOFQ0MStmc2IwN3V2bmo5OTdINEsyN2g0ZXYvVSt3N2xtK0l2UjgyN0w4NGJ6MkFBRUd1VXZuVkhPK1pwUjdqSEtPVjh6eWoxR09TZnpzZ0VJVi9GdGFlYS9HRDN2dGp4dmVKNEE0S2VlZjFrbS9xWG9lYmZsZWNPdkJBQUFCUHJRK3dBOTNEMDgvcWYzR1FDbzQvNzI1cis5ejlDYUx3RUNRQ0FCQUFDQmZBY0FBQUxaQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBQUFFRWdBQUVFZ0FBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0Izbi81Nis5M3ZROEJBTFR6NWErLzM5a0FBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQjNpL0xqMzhPMFBzZ0FNRHgxcGx2QXdBQWdRUUFBQVFTQUFBUVNBQUFRS0NmQWVDTGdBQXd0KzJzdHdFQWdFQUNBQUFDQ1FBQUNQUkxBUGdlQUFETTZlbU10d0VBZ0VBQ0FBQUMvUllBUGdZQWdMbWNtdTAyQUFBUVNBQUFRQ0FCQUFDQlRnYUE3d0VBd0J5ZW0razJBQUFRNk5rQXNBVUFnTEc5Tk10dEFBQWdrQUFBZ0VBdkJvQ1BBUUJnVEsvTmNCc0FBQWowYWdEWUFnREFXTTZaM1RZQUFCRG9yQUN3QlFDQU1adzdzMjBBQUNDUUFBQ0FRR2NIZ0k4QkFLQzJTMmExRFFBQUJMb29BR3dCQUtDbVMyZjB4UnNBRVFBQXRieGxOdnNJQUFBQ3ZTa0FiQUVBb0lhM3ptUWJBQUFJOU9ZQXNBVUFnTDZ1bWNVMkFBQVE2S29Bc0FVQWdENnVuY0ZYYndCRUFBQzB0Y2ZzOVJFQUFBVGFKUUJzQVFDZ2piMW03bTRiQUJFQUFNZmFjOWJ1K2hHQUNBQ0FZK3c5WTMwSEFBQUM3UjRBdGdBQXNLOGpadXNoR3dBUkFBRDdPR3FtSHZZUmdBZ0FnT3NjT1V0OUJ3QUFBaDBhQUxZQUFQQTJSOC9Rd3pjQUlnQUFMdE5pZGpiNUNFQUVBTUI1V3MzTVp0OEJFQUVBOExLV3M3THBsd0JGQUFDYzFucEdOdjlYQUNJQUFIN1ZZeloyK1dlQUlnQUFmdWcxRTd2OUhnQVJBRUM2bnJPdzZ5OENFZ0VBcE9vOUE3di9Kc0RlRHdBQVdxc3crN29Id0xMVWVCQUEwRUtWbVZjaUFKYWx6Z01CZ0tOVW1uVmxBbUJaYWowWUFOaFR0UmxYS2dDV3BkNERBb0JyVlp4dDVRNjA5Zlh6eCsrOXp3QUFiMVZ4OEsvS2JRQzJLajg0QUhoSjlSbFdPZ0NXcGY0REJJQ25ScGhkNVErNDVTTUJBQ29iWWZDdnltOEF0a1o2c0FCa0dXMUdEUlVBeXpMZUF3WmdmaVBPcHVFT3ZPVWpBUUI2R25Id3I0YmJBR3lOL09BQkdOdm9NMmpvdzIvWkJnRFF3dWlEZnpYRkpiYUVBQUJIbUdYd3I2YTZ6SllRQUdBUHN3MysxZERmQVhqSnJQL0JBR2huNWxreTdjVzJiQU1BdU1UTWczODEvUVdmRWdNQW5KSXc5TGVpTHJzbEJBQllscnpCdjRxODlKWVFBTWlVT3ZoWDBaZC9TZ3dBekMxOTZHOTVFQ2NJQVlDNUdQeS84MERPSUFnQXhtTGd2ODREdXBBWUFLakowTCtNaDNVbFFRRFFoNEYvSFEvdkFLSUFZRitHL2Y0ODBNYkVBY0JwaG54Yi93Y2lSenh6TUErT2hBQUFBQUJKUlU1RXJrSmdnZz09IiwgInNpemVzIjogIjUxMng1MTIiLCAidHlwZSI6ICJpbWFnZS9wbmcifV19">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ingreso — Bodegas Margarinas</title>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -40,6 +47,11 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#eaecee;color:var(--
 .sync-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.6);}
 .sync-dot{width:8px;height:8px;border-radius:50%;background:#aaa;flex-shrink:0;}
 .sync-dot.on{background:var(--acento);animation:pulse 2s infinite;}
+.sync-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.6);}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#aaa;flex-shrink:0;}
+.sync-dot.on{background:var(--acento);animation:pulse 2s infinite;}
+.sync-dot.off{background:#e07b2a;}
+.pending-badge{background:#e07b2a;color:white;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:4px;display:none;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
 .page{max-width:680px;margin:0 auto;padding:24px 16px 60px;}
@@ -130,9 +142,10 @@ textarea{resize:vertical;min-height:56px;}
     <h1>📝 Ingreso de Lecturas</h1>
     <p>Bodegas Margarinas</p>
   </div>
-  <div class="sync-badge">
+  <div class="sync-badge" id="sync-badge">
     <div class="sync-dot" id="sync-dot"></div>
     <span id="sync-txt">conectando...</span>
+    <span class="pending-badge" id="pending-badge">0 pendientes</span>
   </div>
 </div>
 
@@ -226,14 +239,65 @@ textarea{resize:vertical;min-height:56px;}
 </div>
 
 <script>
-let selBod=null, selSen=null, fotoTomada=false, fbReady=false;
+let selBod=null, selSen=null, fotoTomada=false, fbReady=false, isOnline=navigator.onLine;
 let dbData={b1:{s1:{},s2:{}},b2:{s1:{},s2:{}}};
+
+/* ── COLA OFFLINE ── */
+function getQueue(){ return JSON.parse(localStorage.getItem('cola_offline')||'[]'); }
+function setQueue(q){ localStorage.setItem('cola_offline', JSON.stringify(q)); }
+
+function updateSyncUI(){
+  const q = getQueue();
+  const dot = document.getElementById('sync-dot');
+  const txt = document.getElementById('sync-txt');
+  const badge = document.getElementById('pending-badge');
+  if(!isOnline){
+    dot.className='sync-dot off';
+    txt.textContent='sin conexión';
+  } else if(fbReady){
+    dot.className='sync-dot on';
+    txt.textContent='en línea';
+  } else {
+    dot.className='sync-dot';
+    txt.textContent='conectando...';
+  }
+  if(q.length > 0){
+    badge.style.display='inline-block';
+    badge.textContent=q.length+' pendiente'+(q.length>1?'s':'');
+  } else {
+    badge.style.display='none';
+  }
+}
+
+async function enviarCola(){
+  if(!fbReady || !isOnline) return;
+  const q = getQueue();
+  if(!q.length) return;
+  const {db,ref,push}=window._fb;
+  const pendientes = [...q];
+  const enviados = [];
+  for(const item of pendientes){
+    try{
+      await push(ref(db,`lecturas/${item.bod}/${item.sen}`), item.rec);
+      enviados.push(item.id);
+    }catch(e){ console.error('Error enviando:', e); }
+  }
+  if(enviados.length){
+    const restantes = getQueue().filter(i => !enviados.includes(i.id));
+    setQueue(restantes);
+    updateSyncUI();
+    if(enviados.length > 0) setStatus(selBod?'b1':'b1','ok',`✅ ${enviados.length} registro(s) pendiente(s) enviados a la nube.`);
+  }
+}
+
+window.addEventListener('online',  ()=>{ isOnline=true;  updateSyncUI(); enviarCola(); });
+window.addEventListener('offline', ()=>{ isOnline=false; updateSyncUI(); });
 
 window.addEventListener('fb-ready',()=>{
   fbReady=true;
   const {db,ref,onValue}=window._fb;
-  document.getElementById('sync-dot').classList.add('on');
-  document.getElementById('sync-txt').textContent='en línea';
+  updateSyncUI();
+  enviarCola(); // intentar enviar pendientes al conectar
   ['b1','b2'].forEach(b=>['s1','s2'].forEach(s=>{
     onValue(ref(db,`lecturas/${b}/${s}`),snap=>{
       dbData[b][s]=snap.val()||{};
@@ -358,7 +422,6 @@ function nowDT(){const d=new Date();const fecha=d.getFullYear()+"-"+String(d.get
 function fmtF(f){if(!f)return'';const p=f.split('-');return p.length===3?p[2]+'/'+p[1]:f;}
 
 async function saveRec(){
-  if(!fbReady){alert('Sin conexión. Espera.');return;}
   if(!fotoTomada){alert('Debes tomar la foto primero.');return;}
   const temp=document.getElementById('temp').value;
   const humi=document.getElementById('humi').value;
@@ -370,59 +433,74 @@ async function saveRec(){
   if(!inspector){alert('Ingresa el nombre del inspector.');return;}
 
   // ── DETECCIÓN DE DUPLICADO ──
-  const registros = Object.values(dbData[selBod][selSen]||{});
+  const registros=Object.values(dbData[selBod][selSen]||{});
   const bodN=selBod==='b1'?'1':'2', senN=selSen==='s1'?'1':'2';
-  // Buscar si ya hay una lectura en la misma fecha y dentro de 30 minutos
-  const horaMin = hora.split(':').map(Number);
-  const horaMinutos = horaMin[0]*60 + horaMin[1];
-  const duplicado = registros.find(r => {
-    if(r.fecha !== fecha) return false;
-    const rMin = r.hora.split(':').map(Number);
-    const rMinutos = rMin[0]*60 + rMin[1];
-    return Math.abs(rMinutos - horaMinutos) <= 30;
+  const horaMin=hora.split(':').map(Number);
+  const horaMinutos=horaMin[0]*60+horaMin[1];
+  const duplicado=registros.find(r=>{
+    if(r.fecha!==fecha) return false;
+    const rMin=r.hora.split(':').map(Number);
+    return Math.abs(rMin[0]*60+rMin[1]-horaMinutos)<=30;
   });
   if(duplicado){
-    const confirmar = confirm(
-      `⚠️ ATENCIÓN\n\n` +
-      `Ya existe una lectura en Bodega ${bodN} · Sensor ${senN}\n` +
-      `para esta fecha y hora:\n\n` +
-      `📅 ${duplicado.fecha}  🕐 ${duplicado.hora}\n` +
-      `🌡️ ${duplicado.temp}°C  💧 ${duplicado.humi}%\n` +
-      `👤 ${duplicado.inspector}\n\n` +
-      `¿Seguro que quieres guardar otra lectura?\n` +
-      `(Toca Cancelar si fue un error de sensor)`
+    const confirmar=confirm(
+      `⚠️ ATENCIÓN\n\nYa existe una lectura en Bodega ${bodN} · Sensor ${senN}\n`+
+      `📅 ${duplicado.fecha}  🕐 ${duplicado.hora}\n`+
+      `🌡️ ${duplicado.temp}°C  💧 ${duplicado.humi||'—'}%\n`+
+      `👤 ${duplicado.inspector}\n\n`+
+      `¿Seguro que quieres guardar otra lectura?\n(Toca Cancelar si fue un error de sensor)`
     );
     if(!confirmar) return;
   }
 
   const btn=document.getElementById('btn-guardar');
   btn.disabled=true;
-  setStatus('saving','Guardando en la nube...');
-  const {db,ref,push}=window._fb;
-  const no=Object.keys(dbData[selBod][selSen]||{}).length+1;
-  try{
-    await push(ref(db,`lecturas/${selBod}/${selSen}`),{
-      no,fecha,hora,inspector,
-      temp:+parseFloat(temp).toFixed(1),
-      humi: humi ? +parseFloat(humi).toFixed(1) : null,
-      obs:document.getElementById('obs').value.trim(),
-      ts:Date.now()
-    });
-    setStatus('ok','✅ Lectura #'+no+' guardada correctamente.');
-    // Limpiar para siguiente lectura — mantiene bodega y sensor
-    ['temp','humi','obs'].forEach(f=>document.getElementById(f).value='');
-    document.getElementById('preview-img').style.display='none';
-    document.getElementById('cam-btn').querySelector('.cam-lbl').textContent='Tomar foto';
-    document.getElementById('form-block').classList.remove('enabled');
-    fotoTomada=false;
-  }catch(e){setStatus('error','Error: '+e.message);}
+
+  const no=Object.keys(dbData[selBod][selSen]||{}).length+getQueue().filter(i=>i.bod===selBod&&i.sen===selSen).length+1;
+  const rec={
+    no, fecha, hora, inspector,
+    temp:+parseFloat(temp).toFixed(1),
+    humi:humi?+parseFloat(humi).toFixed(1):null,
+    obs:document.getElementById('obs').value.trim(),
+    ts:new Date(fecha+'T'+hora+':00').getTime()
+  };
+
+  if(isOnline && fbReady){
+    setStatus('saving','Guardando en la nube...');
+    const {db,ref,push}=window._fb;
+    try{
+      await push(ref(db,`lecturas/${selBod}/${selSen}`),rec);
+      setStatus('ok','✅ Lectura #'+no+' guardada en la nube.');
+    }catch(e){
+      guardarEnCola(rec);
+    }
+  } else {
+    guardarEnCola(rec);
+  }
+
+  ['temp','humi','obs'].forEach(f=>document.getElementById(f).value='');
+  document.getElementById('preview-img').style.display='none';
+  document.getElementById('cam-btn').querySelector('.cam-lbl').textContent='Tomar foto';
+  document.getElementById('form-block').classList.remove('enabled');
+  fotoTomada=false;
   btn.disabled=false;
+}
+
+function guardarEnCola(rec){
+  const q=getQueue();
+  q.push({id:Date.now()+'_'+Math.random().toString(36).slice(2), bod:selBod, sen:selSen, rec});
+  setQueue(q);
+  updateSyncUI();
+  setStatus('ok','📱 Sin internet — guardado en el celular. Se enviará automáticamente al reconectar.');
 }
 
 function renderList(){
   const el=document.getElementById('recent-list');
   if(!selBod||!selSen){el.innerHTML='<div class="empty-list">Selecciona bodega y sensor para ver las lecturas</div>';return;}
-  const arr=Object.values(dbData[selBod][selSen]||{}).sort((a,b)=>a.ts-b.ts);
+  const arr=Object.values(dbData[selBod][selSen]||{}).sort((a,b)=>{
+    const da=a.fecha+' '+a.hora, db=b.fecha+' '+b.hora;
+    return da<db?-1:da>db?1:0;
+  });
   const bodN=selBod==='b1'?'1':'2', senN=selSen==='s1'?'1':'2';
   document.getElementById('recent-title').textContent=`Últimas 8 lecturas — Bodega ${bodN} · Sensor ${senN}`;
   const sc=selSen==='s1'?'s1':'s2';
