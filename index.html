@@ -243,8 +243,8 @@ function renderBodega(b){
   <div class="tbl-card">
     <div class="tbl-card-title">📋 Tabla de registros — Bodega #${num}</div>
     <div class="tabs-tbl">
-      <button class="tab-tbl active-s1" id="ttab-${b}-s1" onclick="switchTbl('${b}','s1')">● Sensor 1 (${d1.length})</button>
-      <button class="tab-tbl" id="ttab-${b}-s2" onclick="switchTbl('${b}','s2')">● Sensor 2 (${d2.length})</button>
+      <button class="tab-tbl active-s1" id="ttab-${b}-s1" onclick="switchTbl('${b}','s1')">● Sensor 1</button>
+      <button class="tab-tbl" id="ttab-${b}-s2" onclick="switchTbl('${b}','s2')">● Sensor 2</button>
     </div>
     <div class="tbl-panel active" id="tpanel-${b}-s1">
       <div class="tbl-wrap" id="twrap-${b}-s1"></div>
@@ -361,16 +361,19 @@ function renderTabla(b,s,data){
   if(!el)return;
   if(!data.length){el.innerHTML='<p style="padding:16px;text-align:center;color:#5d6d7e;font-size:13px;">Sin datos para este rango</p>';return;}
   const dataDesc=[...data].reverse();
+  const ultimos10=dataDesc.slice(0,10);
+  const total=data.length;
   el.innerHTML=`<table>
-    <thead><tr><th>No.</th><th>Fecha</th><th>Hora</th><th>Temp.</th><th>Humedad</th><th>Inspector</th><th>Observaciones</th></tr></thead>
-    <tbody>${dataDesc.map((r,i)=>`<tr>
-      <td style="color:var(--muted);font-size:12px;">${data.length - i}</td><td>${fmtF(r.fecha)}</td><td>${r.hora}</td>
+    <thead><tr><th>Fecha</th><th>Hora</th><th>Temp.</th><th>Humedad</th><th>Inspector</th><th>Observaciones</th></tr></thead>
+    <tbody>${ultimos10.map((r)=>`<tr>
+      <td>${fmtF(r.fecha)}</td><td>${r.hora}</td>
       <td><span class="badge badge-t">${r.temp}°C</span></td>
       <td><span class="badge badge-h">${r.humi?r.humi+'%':'—'}</span></td>
       <td style="color:#1a5276;font-weight:600;">${r.inspector||'—'}</td>
       <td style="color:#6b6a64;font-size:12px;">${r.obs||''}</td>
     </tr>`).join('')}</tbody>
-  </table>`;
+  </table>
+  ${total>10?`<p style="text-align:center;font-size:12px;color:#5d6d7e;padding:10px 0 4px;">Mostrando los últimos 10 de ${total} registros — exporta a Excel para ver el historial completo</p>`:''}`;
 }
 
 
