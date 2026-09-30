@@ -432,6 +432,13 @@ async function saveRec(){
   if(!(selBod==='b1' && selSen==='s1') && !humi){alert('Completa el campo de Humedad.');return;}
   if(!inspector){alert('Ingresa el nombre del inspector.');return;}
 
+  // ── VALIDACIÓN DE RANGO DE TEMPERATURA ──
+  const tNum=parseFloat(String(temp).replace(',','.'));
+  if(isNaN(tNum) || tNum<TEMP_MIN || tNum>TEMP_MAX){
+    alarmaTemp(`Ingresaste <b>${temp} °C</b>.<br>El valor permitido está entre <b>${TEMP_MIN} °C</b> y <b>${TEMP_MAX} °C</b>.<br><br>Revisa el termohigrómetro y vuelve a digitar.<br><small>Ej: 188 → 18.8 · 2.1 → 21</small>`);
+    return;
+  }
+
   // ── DETECCIÓN DE DUPLICADO ──
   const registros=Object.values(dbData[selBod][selSen]||{});
   const bodN=selBod==='b1'?'1':'2', senN=selSen==='s1'?'1':'2';
@@ -532,6 +539,58 @@ function renderList(){
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('/Control-de-temperatura-bodegas/sw.js', {scope: '/Control-de-temperatura-bodegas/'}).catch(e => {});
 }
+</script>
+<!-- ═══ ALARMA DE TEMPERATURA FUERA DE RANGO ═══ -->
+<style>
+#alarma-temp{position:fixed;inset:0;background:rgba(146,43,33,.88);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px;}
+#alarma-temp.on{display:flex;animation:alarmaFlash .6s infinite alternate;}
+@keyframes alarmaFlash{from{background:rgba(146,43,33,.9)}to{background:rgba(231,76,60,.75)}}
+#alarma-temp .box{background:white;border-radius:14px;max-width:380px;width:100%;padding:24px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.4);}
+#alarma-temp h2{color:#922b21;font-size:20px;margin-bottom:12px;}
+#alarma-temp p{font-size:15px;color:#17202a;line-height:1.5;margin-bottom:18px;}
+#alarma-temp button{width:100%;padding:14px;border:none;border-radius:10px;background:#922b21;color:white;font-size:16px;font-weight:700;cursor:pointer;}
+input.temp-mal{border-color:#e74c3c !important;background:#fdedec !important;}
+</style>
+<div id="alarma-temp"><div class="box">
+  <h2>🚨 TEMPERATURA FUERA DE RANGO</h2>
+  <p id="alarma-msg"></p>
+  <button onclick="cerrarAlarma()">Entendido, voy a corregir</button>
+</div></div>
+<script>
+// ── Límites permitidos (ajustar aquí si cambian) ──
+const TEMP_MIN=14.0;
+const TEMP_MAX=28.0;
+
+let _alarmaCtx=null,_alarmaTimer=null;
+function alarmaTemp(msg){
+  document.getElementById('alarma-msg').innerHTML=msg;
+  document.getElementById('alarma-temp').classList.add('on');
+  document.getElementById('temp').classList.add('temp-mal');
+  if(navigator.vibrate) navigator.vibrate([400,150,400,150,400]);
+  try{
+    _alarmaCtx=_alarmaCtx||new (window.AudioContext||window.webkitAudioContext)();
+    let alto=true;
+    const beep=()=>{
+      const o=_alarmaCtx.createOscillator(),g=_alarmaCtx.createGain();
+      o.type='square';o.frequency.value=alto?1100:750;alto=!alto;
+      g.gain.value=0.25;o.connect(g);g.connect(_alarmaCtx.destination);
+      o.start();o.stop(_alarmaCtx.currentTime+0.25);
+    };
+    beep();clearInterval(_alarmaTimer);_alarmaTimer=setInterval(beep,300);
+    setTimeout(()=>clearInterval(_alarmaTimer),4000); // suena máx. 4 s
+  }catch(e){}
+}
+function cerrarAlarma(){
+  clearInterval(_alarmaTimer);
+  if(navigator.vibrate) navigator.vibrate(0);
+  document.getElementById('alarma-temp').classList.remove('on');
+  const t=document.getElementById('temp');t.select();t.focus();
+}
+// Aviso visual mientras escribe
+document.getElementById('temp').addEventListener('input',e=>{
+  const v=parseFloat(String(e.target.value).replace(',','.'));
+  e.target.classList.toggle('temp-mal', e.target.value!=='' && (isNaN(v)||v<TEMP_MIN||v>TEMP_MAX));
+});
 </script>
 </body>
 </html>
