@@ -1,0 +1,14 @@
+{
+  "id": "/Control-de-temperatura-bodegas/ingreso.html",
+  "name": "Ingreso Temperaturas Bodegas",
+  "short_name": "Ingreso Temp",
+  "start_url": "/Control-de-temperatura-bodegas/ingreso.html",
+  "scope": "/Control-de-temperatura-bodegas/",
+  "display": "standalone",
+  "background_color": "#0f2d4a",
+  "theme_color": "#0f2d4a",
+  "icons": [
+    { "src": "/Control-de-temperatura-bodegas/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/Control-de-temperatura-bodegas/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
